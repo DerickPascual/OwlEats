@@ -25,7 +25,7 @@ const run = async () => {
     const browser = await puppeteer.launch({
         headless: false
     });
-    const url = "https://dining.rice.edu/north-servery";
+    const url = "https://dining.rice.edu/south-servery";
 
     const menuData = await scraper(browser, url);
 
