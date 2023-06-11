@@ -12,7 +12,7 @@ const scraper = async (browser, url) => {
                 
                 // handle allergens
                 const allergensParent = e2.querySelector('.micons');
-                const allergens = []
+                const allergens = [];
                 if (allergensParent) {
                     const vegetarian = allergensParent.querySelector('.icons-vegetarian');
                     if (vegetarian) allergens.push('vegetarian');
@@ -50,7 +50,7 @@ const scraper = async (browser, url) => {
                     const sesame = allergensParent.querySelector('.icons-sesame');
                     if (sesame) allergens.push('sesame');
                 }
-
+                
                 return {
                     name: name ? name.innerText : null,
                     allergens: allergens ? allergens : []
