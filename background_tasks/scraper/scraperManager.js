@@ -42,6 +42,8 @@ const getAllMenus = async () => {
     seibelMenus = await getMenus('https://dining.rice.edu/seibel-servery');
     bakerMenus = await getMenus('https://dining.rice.edu/baker-college-kitchen');
 
+    console.log(northMenus);
+
     return {
         north: northMenus,
         south: southMenus,
