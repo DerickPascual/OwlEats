@@ -58,8 +58,8 @@ const scraper = async (browser, url) => {
             });
 
             return {
-                day: day ? day.innerText : null,
-                mealtime: mealtime ? mealtime.innerText : null,
+                day: day ? day.innerText.toLowerCase() : null,
+                mealtime: mealtime ? mealtime.innerText.toLowerCase() : null,
                 mitems: mitems ? mitems : null,
             }
         });
