@@ -68,9 +68,8 @@ const createTxtMenu = (filteredMitems, servery) => {
 
 }
 
-const createTxtBody = async (mealtime, userServeries, userAllergens) => {
+const createTxtBody = async (menus, userServeries, userAllergens) => {
     const day = getWeekday();
-    const menus = await fetchMenus(day, mealtime);
 
     let txtBody = '\n';
     const serveries = ['north', 'west', 'south', 'seibel', 'baker'];
@@ -86,7 +85,7 @@ const createTxtBody = async (mealtime, userServeries, userAllergens) => {
     return txtBody;
 };
 
-const createTxt = async (mealtime, userServeries, userAllergens=[]) => {
+const createTxt = async (menus, mealtime, userServeries, userAllergens=[]) => {
     const txtHeader = createTxtHeader(mealtime);
     const txtBody = await createTxtBody(mealtime, userServeries, userAllergens);
 

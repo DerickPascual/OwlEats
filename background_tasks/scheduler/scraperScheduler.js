@@ -1,7 +1,9 @@
 const cron = require('node-cron');
 const getAllMenus = require('../scraper/scraperManager');
 const { updateAllMenus, fetchMenus } = require('../../models/menus');
-const onBreak = require('./onBreak');
+const onBreak = require('./breakScheduler');
+
+let delayTexts = false;
 
 const mitemsAreNew = (oldMitems, newMitems) => { 
     if (oldMitems.length !== newMitems.length) return true;
@@ -52,28 +54,8 @@ const menusAreNew = async (newWeeklyMenus) => {
     return false;
 };
 
-// end of summer break
-cron.schedule('0 0 19 8 *', () => {
-    onBreak = false;
-});
-
-// first semester finals. There is a possibility that a servery will be closed for 2+ weeks by this date.
-cron.schedule('0 0 10 12 *', () => {
-    onBreak = true;
-});
-
-// start of 2nd semester
-cron.schedule('0 0 8 1 *', () => {
-    onBreak = false;
-});
-
-// second semester finals. Possibility that a servery will be closed for 2+ weeks by this date.
-cron.schedule('0 0 24 4 *', () => {
-    onBreak = true;
-});
-
 // cron translation: At 10:20 on Monday
-cron.schedule('20 10 * * 1', async () => {
+const monUpdate = cron.schedule('20 10 * * 1', async () => {
     const newWeeklyMenus = await getAllMenus();
 
     const newMenusAreNew = await menusAreNew(newWeeklyMenus);
@@ -82,23 +64,21 @@ cron.schedule('20 10 * * 1', async () => {
     } else {
         // do something
     }
-}, {
-    scheduled: true,
-    timezone: 'America/Chicago'
-});
+}, { timezone: 'America/Chicago', scheduled: false });
 
 // description: update menus 
 // cron translation: At 10:20 on every day of the week from Tuesday through Sunday
-cron.schedule('20 10 * * 2-7', async () => {
+const tuesThroughSunUpdate = cron.schedule('20 10 * * 2-7', async () => {
     const newMenus = await getAllMenus();
 
     if (newMenusAreNew) {
         await updateAllMenus(newWeeklyMenus);
     }
-}, { 
-    scheduled: true,
-    timezone: 'America/Chicago'
-});
+}, { timezone: 'America/Chicago', scheduled: false });
 
+const startUpdateSchedulers = () => {
+    monUpdate.start();
+    tuesThroughSunUpdate.start();
+}
 
-
+module.exports = { delayTexts, startUpdateSchedulers };

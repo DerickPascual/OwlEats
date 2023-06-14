@@ -107,4 +107,8 @@ const getAllMenus = async () => {
     };
 };
 
-module.exports = getAllMenus;
+if (process.env.NODE_ENV === "test") {
+    module.exports = { filterMitems, restructureMenus, getMenus, getAllMenus }
+} else {
+    module.exports = getAllMenus;
+}

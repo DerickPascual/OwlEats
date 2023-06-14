@@ -2,6 +2,7 @@ const scraper = async (browser, url) => {
     let page = await browser.newPage();
     await page.goto(url);
 
+    /* istanbul ignore next */
     const menuData = await page.evaluate(() => {
         // Each views element container contains the day and lunch OR just the dinner
         return Array.from(document.querySelectorAll('.views-element-container'), (e) => {
@@ -11,48 +12,50 @@ const scraper = async (browser, url) => {
                 const name = e2.querySelector('.mname');
                 
                 // handle allergens
-                const allergensParent = e2.querySelector('.micons');
+                const dietInfoParent = e2.querySelector('.micons');
+                const diets = []
                 const allergens = [];
-                if (allergensParent) {
-                    const vegetarian = allergensParent.querySelector('.icons-vegetarian');
-                    if (vegetarian) allergens.push('vegetarian');
+                if (dietInfoParent) {
+                    const vegetarian = dietInfoParent.querySelector('.icons-vegetarian');
+                    if (vegetarian) diets.push('vegetarian');
                 
-                    const vegan = allergensParent.querySelector('.icons-vegan');
-                    if (vegan) allergens.push('vegan');
+                    const vegan = dietInfoParent.querySelector('.icons-vegan');
+                    if (vegan) diets.push('vegan');
 
-                    const gluten = allergensParent.querySelector('.icons-gluten');
+                    const halal = dietInfoParent.querySelector('.icons-halal');
+                    if (halal) diets.push('halal');
+
+                    const gluten = dietInfoParent.querySelector('.icons-gluten');
                     if (gluten) allergens.push('gluten');
                 
-                    const soy = allergensParent.querySelector('.icons-soy');
+                    const soy = dietInfoParent.querySelector('.icons-soy');
                     if (soy) allergens.push('soy');
                 
-                    const dairy = allergensParent.querySelector('.icons-milk');
+                    const dairy = dietInfoParent.querySelector('.icons-milk');
                     if (dairy) allergens.push('dairy');
                 
-                    const eggs = allergensParent.querySelector('.icons-eggs');
+                    const eggs = dietInfoParent.querySelector('.icons-eggs');
                     if (eggs) allergens.push('eggs');
                 
-                    const fish = allergensParent.querySelector('.icons-fish');
+                    const fish = dietInfoParent.querySelector('.icons-fish');
                     if (fish) allergens.push('fish');
                 
-                    const shellfish = allergensParent.querySelector('.icons-shellfish');
+                    const shellfish = dietInfoParent.querySelector('.icons-shellfish');
                     if (shellfish) allergens.push('shellfish');
                 
-                    const peanuts = allergensParent.querySelector('.icons-peanuts');
+                    const peanuts = dietInfoParent.querySelector('.icons-peanuts');
                     if (peanuts) allergens.push('peanuts');
                 
-                    const treeNuts = allergensParent.querySelector('.icons-tree-nuts');
+                    const treeNuts = dietInfoParent.querySelector('.icons-tree-nuts');
                     if (treeNuts) allergens.push('treenuts');
                 
-                    const halal = allergensParent.querySelector('.icons-halal');
-                    if (halal) allergens.push('halal');
-                
-                    const sesame = allergensParent.querySelector('.icons-sesame');
+                    const sesame = dietInfoParent.querySelector('.icons-sesame');
                     if (sesame) allergens.push('sesame');
                 }
                 
                 return {
                     name: name ? name.innerText : null,
+                    diets: diets ? diets : [],
                     allergens: allergens ? allergens : []
                 }
             });
