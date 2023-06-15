@@ -1,26 +1,3 @@
-const { DateTime } = require('luxon');
-const getRandPhrase = require('./phraseGenerator');
-
-const getWeekday = () => {
-    const dt = DateTime.now().setZone('America/Chicago');
-    switch (dt.weekday) {
-        case 1:
-            return 'monday';
-        case 2:
-            return 'tuesday';
-        case 3:
-            return 'wednesday';
-        case 4:
-            return 'thursday';
-        case 5:
-            return 'friday';
-        case 6:
-            return 'saturday';
-        case 7:
-            return 'sunday';
-    };
-}
-
 const createTxtHeader = (mealtime) => {
     formattedMtime = mealtime.charAt(0).toUpperCase() + mealtime.slice(1).toLowerCase();
 
@@ -117,8 +94,6 @@ const createTxtMenu = (mitemNames, servery) => {
 }
 
 const createTxtBody = (menus, userServeries, userDiets, userAllergens) => {
-    const day = getWeekday();
-
     let txtBody = '\n';
     const serveries = ['north', 'west', 'south', 'seibel', 'baker'];
     for (servery of serveries) {
@@ -137,13 +112,17 @@ const createTxtBody = (menus, userServeries, userDiets, userAllergens) => {
 
 const createTxt = (menus, mealtime, userServeries, userDiets=[], userAllergens=[]) => {
     const txtHeader = createTxtHeader(mealtime);
-    const txtBody = createTxtBody(menus, mealtime, userServeries, userDiets, userAllergens);
+    const txtBody = createTxtBody(menus, userServeries, userDiets, userAllergens);
 
-    return txtHeader + txtBody + getRandPhrase(mealtime);
+    const txtFooter = '\nManage settings/unsubscribe at: www.ricemenus.com';
+
+    const txt = txtHeader + txtBody + txtFooter;
+
+    return txt;
 }
 
 if (process.env.NODE_ENV === 'test') {
-    module.exports = { createTxtBody, filterDiets, filterAllergens, createTxtMenu };
+    module.exports = { createTxtBody, filterDiets, filterAllergens, createTxtMenu, createTxt };
 } else {
     module.exports = createTxt;
 }

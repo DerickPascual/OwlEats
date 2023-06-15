@@ -1,11 +1,13 @@
 const pool = require('./db');
 
+// maybe use bcrypt?
+
 // CREATE USER
-const createUser = async (phone_number, serveries=[], allergens=[], diets=[], phrase=true) => {
+const createUser = async (phone_number, serveries=[], allergens=[], diets=[]) => {
     const res = await pool.query(`
     INSERT INTO users (phone_number, serveries, allergens, diets, phrase) 
-    VALUES ($1, $2, $3, $4, $5)
-    `, [phone_number, serveries, allergens, diets, phrase])
+    VALUES ($1, $2, $3, $4)
+    `, [phone_number, serveries, allergens, diets])
         .catch((err) => {
             console.error;
         });
@@ -14,37 +16,14 @@ const createUser = async (phone_number, serveries=[], allergens=[], diets=[], ph
 };
 
 // READ USER
-const getUserById = async (id) => {
-    const res = await pool.query(`SELECT * FROM users WHERE id=$1`, [id])
+const fetchAllUsers = async () => {
+    const res = await pool.query(`SELECT * FROM USERS`)
         .catch((err) => {
             console.error;
         });
-
-    return res.rows[0];
-};
-
-const getUserByPhoneNumber = async (phone_number) => {
-    const res = await pool.query(`SELECT * FROM users WHERE phone_number=$1`, [phone_number])
-        .catch((err) => {
-            console.error;
-        });
-
-    return res.rows[0];
+    return res.rows;
 }
 
-// UPDATE USER
-const updateUser = async (id, phone_number, serveries, allergens, diets, phrase) => {
-    const res = await pool.query(`
-        UPDATE users 
-        SET phone_number=$1, serveries=$2, allergens=$3, diets=$4, phrase=$5
-        WHERE id=$6
-    `, [id, phone_number, serveries, allergens, diets, phrase])
-        .catch((err) => {
-            console.error;
-        });
-
-    return res;
-};
 
 // DELETE USER
 const deleteUser = async (id) => {
@@ -55,6 +34,8 @@ const deleteUser = async (id) => {
 
     return res;
 }
+
+module.exports = { fetchAllUsers };
 
 /*
 const createUsersQuery = `CREATE TABLE users (
