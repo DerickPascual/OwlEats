@@ -23,6 +23,7 @@ const updateAllMenus = async (menus) => {
     }
 };
 
+// updates the weekly menus table given a weekly menu
 const updateWeeklyMenusTable = async (menus) => {
     await pool.query(`UPDATE weekly_menus SET menus=($1)`, [JSON.stringify(menus)])
         .catch((err) => {
@@ -30,6 +31,7 @@ const updateWeeklyMenusTable = async (menus) => {
         });
 };
 
+// fetches weekly menus from weekly menus table
 const fetchWeeklyMenus = async () => {
     const res = await pool.query(`SELECT menus FROM weekly_menus`)
         .catch((err) => {
