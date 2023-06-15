@@ -1,5 +1,4 @@
 const pool = require('./db');
-const { getAllMenus } = require('../background_tasks/scraper/scraperManager');
 
 // updates all menus and mealtimes of DB given the menu of all serveries we get from getAllMenus
 const updateAllMenus = async (menus) => {
@@ -31,6 +30,14 @@ const updateWeeklyMenusTable = async (menus) => {
         });
 };
 
+const fetchWeeklyMenus = async () => {
+    const res = await pool.query(`SELECT menus FROM weekly_menus`)
+        .catch((err) => {
+            console.error;
+        });
+    return res.rows[0];
+}
+
 // fetches menus from all serveries for a given day and mealtime
 const fetchMenus = async (day, mealtime) => {
     day = day.toLowerCase();
@@ -47,7 +54,7 @@ const fetchMenus = async (day, mealtime) => {
     return res.rows[0];
 };
 
-module.exports = { updateAllMenus, updateWeeklyMenusTable, fetchMenus };
+module.exports = { updateAllMenus, updateWeeklyMenusTable, fetchWeeklyMenus, fetchMenus };
 
 /*
 ** QUERIES USED TO INITIALIZE TABLES **

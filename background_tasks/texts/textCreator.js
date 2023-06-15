@@ -1,5 +1,4 @@
 const { DateTime } = require('luxon');
-const { fetchMenus } = require('../../models/menus');
 const getRandPhrase = require('./phraseGenerator');
 
 const getWeekday = () => {
@@ -28,6 +27,47 @@ const createTxtHeader = (mealtime) => {
     return `Today's ${formattedMtime} Menus:\n`;
 };
 
+const filterDiets = (mitems, userDiets) => {
+    const userIsVegan = userDiets.includes('vegan');
+    const userIsVegetarian = userDiets.includes('vegetarian');
+    const userIsHalal = userDiets.includes('halal');
+    
+    if (!userIsVegan && !userIsVegetarian && !userIsHalal) {
+        return mitems;
+    }
+
+    const filtered = []
+    for (mitem of mitems) {
+        const mitemIsVegan = mitem.diets.includes('vegan');
+        const mitemIsVegetarian = mitem.diets.includes('vegetarian');
+        const mitemIsHalal = mitem.diets.includes('halal');
+
+        if ((userIsVegan && userIsHalal)) {
+            if (mitemIsVegan && mitemIsHalal) {
+                filtered.push(mitem);
+            }
+        } else if (userIsVegetarian && userIsHalal) {
+            if ((mitemIsVegetarian && mitemIsHalal) || (mitemIsVegan && mitemIsHalal)) {
+                filtered.push(mitem);
+            }
+        } else if (userIsVegan) {
+            if (mitemIsVegan) {
+                filtered.push(mitem);
+            }
+        } else if (userIsVegetarian) {
+            if (mitemIsVegan || mitemIsVegetarian) {
+                filtered.push(mitem);
+            }
+        } else if (userIsHalal) {
+            if (mitemIsHalal) {
+                filtered.push(mitem)
+            }
+        }
+    }
+
+    return filtered;
+}
+
 const filterAllergens = (mitems, userAllergens) => {
     const filtered = [];
     for (mitem of mitems) {
@@ -42,33 +82,41 @@ const filterAllergens = (mitems, userAllergens) => {
 
         if (foundAllergen) continue;
 
-        filtered.push(mitem.name);
+        filtered.push(mitem);
     }
 
     return filtered;
 };
 
-const createTxtMenu = (filteredMitems, servery) => {
+const getMitemNames = (mitems) => {
+    const names = [];
+    for (mitem of mitems) {
+        names.push(mitem.name);
+    }
+    return names;
+}
+
+const createTxtMenu = (mitemNames, servery) => {
     const formattedServ = servery.toUpperCase();
     const menuHeader = `----${formattedServ}----\n`;
     
     let menuBody = '';
-    if (filteredMitems.length === 0) {
-        menuBody += 'Closed.\n';
+    if (mitemNames.length === 0) {
+        menuBody += 'No menu items today.\n';
         return menuHeader + menuBody;
     }
 
-    for (i = 0; i < filteredMitems.length - 1; i++) {
-        menuBody += `${filteredMitems[i]},\n`;
+    for (i = 0; i < mitemNames.length - 1; i++) {
+        menuBody += `${mitemNames[i]},\n`;
     }
 
-    menuBody += `${filteredMitems[filteredMitems.length - 1]}.\n`;
+    menuBody += `${mitemNames[mitemNames.length - 1]}.\n`;
 
     return menuHeader + menuBody;
 
 }
 
-const createTxtBody = async (menus, userServeries, userAllergens) => {
+const createTxtBody = (menus, userServeries, userDiets, userAllergens) => {
     const day = getWeekday();
 
     let txtBody = '\n';
@@ -78,18 +126,24 @@ const createTxtBody = async (menus, userServeries, userAllergens) => {
             continue;
         }
         
+        mitems = filterDiets(menus[servery], userDiets);
         mitems = filterAllergens(menus[servery], userAllergens);
+        mitems = getMitemNames(mitems);
         txtBody += createTxtMenu(mitems, servery) + '\n';
     }
 
     return txtBody;
 };
 
-const createTxt = async (menus, mealtime, userServeries, userAllergens=[]) => {
+const createTxt = (menus, mealtime, userServeries, userDiets=[], userAllergens=[]) => {
     const txtHeader = createTxtHeader(mealtime);
-    const txtBody = await createTxtBody(mealtime, userServeries, userAllergens);
+    const txtBody = createTxtBody(menus, mealtime, userServeries, userDiets, userAllergens);
 
     return txtHeader + txtBody + getRandPhrase(mealtime);
 }
 
-module.exports = createTxt;
+if (process.env.NODE_ENV === 'test') {
+    module.exports = { createTxtBody, filterDiets, filterAllergens, createTxtMenu };
+} else {
+    module.exports = createTxt;
+}

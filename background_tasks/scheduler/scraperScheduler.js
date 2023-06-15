@@ -1,53 +1,36 @@
 const cron = require('node-cron');
 const getAllMenus = require('../scraper/scraperManager');
-const { updateAllMenus, fetchMenus } = require('../../models/menus');
+const { updateAllMenus, fetchWeeklyMenus } = require('../../models/menus');
 const onBreak = require('./breakScheduler');
+const deepEqual = require('deep-equal');
 
 let delayTexts = false;
 
-const mitemsAreNew = (oldMitems, newMitems) => { 
-    if (oldMitems.length !== newMitems.length) return true;
-
-    for (i = 0; i< oldMitems.length; i++) {
-        const oldMitem = oldMitems[i];
-        const newMitem = newMitems[i];
-
-        if (oldMitem.name !== newMitem.name) {
-            return true;
-        }
-    }
-
-    return false;
-}
-
-const menusAreNew = async (newWeeklyMenus) => {
+const menusAreNew = (currentWeeklyMenus, newWeeklyMenus, onBreak) => {
     const serveries = ['north', 'west', 'south', 'seibel', 'baker'];
-    const days = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday'];
 
     const isNew = { north: false, west: false, south: false, seibel: false, baker: false };
 
     for (servery of serveries) {
-        for (day of days) {
-            const oldMenu = await fetchMenus(day, 'lunch');
+        const serveryMenuIsNew = !deepEqual(currentWeeklyMenus[servery], newWeeklyMenus[servery]);
 
-            const serveryMenuIsNew = mitemsAreNew(oldMenu[servery], newWeeklyMenus[servery][day]['lunch']);
+        if (serveryMenuIsNew) {
+            isNew[servery] = true;
+        }
 
-            if (serveryMenuIsNew) {
-                isNew[servery] = true;
-            }
-
-            if (onBreak) {
-                // combinations of possible serveries on break
-                if ((isNew.north && isNew.south) || (isNew.north && isNew.seibel) || (isNew.west && isNew.south) || (isNew.west && isNew.seibel)) {
-                    return true;
-                }
-            }
-
-            // There's only a possibility for a false negative if a servery is closed for 2+ weeks and not updated. I accounted for this with onBreak variable.
-            // Otherwise, every single servery menu should be updated on Monday.
-            if (isNew.north && isNew.west && isNew.south && isNew.seibel && isNew.baker) {
+        if (onBreak) {
+            // combinations of possible serveries on break
+            // There is a possibility for a false positive if another servery is open and hasn't been updated but one of these combination of serveries has been updated.
+            // Not sure if there is a good solution to that other than monitoring which serveries are open during break and changing these conditions to accomodate that.
+            if ((isNew.north && isNew.south) || (isNew.north && isNew.seibel) || (isNew.west && isNew.south) || (isNew.west && isNew.seibel)) {
                 return true;
             }
+        }
+
+        // There's only a possibility for a false negative if a servery is closed for 2+ weeks and not updated. I accounted for this with onBreak variable.
+        // Otherwise, every single servery menu should be updated on Monday.
+        if (isNew.north && isNew.west && isNew.south && isNew.seibel && isNew.baker) {
+            return true;
         }
     }
 
@@ -58,7 +41,8 @@ const menusAreNew = async (newWeeklyMenus) => {
 const monUpdate = cron.schedule('20 10 * * 1', async () => {
     const newWeeklyMenus = await getAllMenus();
 
-    const newMenusAreNew = await menusAreNew(newWeeklyMenus);
+    const currentWeeklyMenus = await fetchWeeklyMenus();
+    const newMenusAreNew = await menusAreNew(currentWeeklyMenus, newWeeklyMenus, onBreak);
     if (newMenusAreNew) {
         await updateAllMenus(newWeeklyMenus);
     } else {
@@ -69,7 +53,10 @@ const monUpdate = cron.schedule('20 10 * * 1', async () => {
 // description: update menus 
 // cron translation: At 10:20 on every day of the week from Tuesday through Sunday
 const tuesThroughSunUpdate = cron.schedule('20 10 * * 2-7', async () => {
-    const newMenus = await getAllMenus();
+    const newWeeklyMenus = await getAllMenus();
+
+    const currentWeeklyMenus = await fetchWeeklyMenus();
+    const newMenusAreNew = await menusAreNew(currentWeeklyMenus, newWeeklyMenus, onBreak);
 
     if (newMenusAreNew) {
         await updateAllMenus(newWeeklyMenus);
@@ -79,6 +66,10 @@ const tuesThroughSunUpdate = cron.schedule('20 10 * * 2-7', async () => {
 const startUpdateSchedulers = () => {
     monUpdate.start();
     tuesThroughSunUpdate.start();
-}
+};
 
-module.exports = { delayTexts, startUpdateSchedulers };
+if (process.env.NODE_ENV === 'test') {
+    module.exports = { delayTexts, menusAreNew, startUpdateSchedulers }
+} else {
+    module.exports = { delayTexts, startUpdateSchedulers };
+}
