@@ -3,16 +3,17 @@ const pool = require('./db');
 // maybe use bcrypt for phone nums?
 
 // CREATE USER
-const createUser = async (phone_number, serveries=[], allergens=[], diets=[]) => {
+const insertUser = async (phone_number, serveries = [], allergens = [], diets = []) => {
     const res = await pool.query(`
-    INSERT INTO users (phone_number, serveries, allergens, diets, phrase) 
+    INSERT INTO users (phone_number, serveries, allergens, diets) 
     VALUES ($1, $2, $3, $4)
+    RETURNING *
     `, [phone_number, serveries, allergens, diets])
         .catch((err) => {
             console.error;
         });
 
-    return res;
+    return res.rows[0];
 };
 
 // READ USER
@@ -30,7 +31,7 @@ const fetchUserById = async (id) => {
             console.error;
         });
 
-    return res;
+    return res.rows[0];
 };
 
 const fetchUserByPhone = async (phone_number) => {
@@ -39,20 +40,24 @@ const fetchUserByPhone = async (phone_number) => {
             console.error;
         });
 
-    return res;
+    return res.rows[0];
 }
 
 // DELETE USER
 const deleteUser = async (id) => {
-    const res = await pool.query(`DELETE * FROM users WHERE id=$1`, [id])
+    const res = await pool.query(`
+    DELETE FROM users 
+    WHERE id=$1
+    RETURNING *
+    `, [id])
         .catch((err) => {
             console.error;
         });
 
-    return res;
+    return res.rows[0];
 };
 
-module.exports = { createUser, fetchAllUsers, fetchUserById, deleteUser };
+module.exports = { insertUser, fetchAllUsers, fetchUserById, fetchUserByPhone, deleteUser };
 
 /*
 const createUsersQuery = `CREATE TABLE users (
