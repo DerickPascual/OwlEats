@@ -10,6 +10,8 @@ app.use(cors({
     origin: ['http://localhost:3000']
 }));
 
+app.use('./users', require('./routes/userRoutes'));
+
 app.use(errorHandler);
 
 app.listen(port, () => {

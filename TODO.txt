@@ -1,2 +1,5 @@
-1. Define user routes, CORS
+1. Unit test user routes with jest
+2. Test user routes with postman
+2. create login/registration routes, authentication middleware, 
+3. express-session
 2. Front end
