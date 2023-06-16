@@ -1,4 +1,4 @@
-const cron = require('node-cron');
+const CronJob = require('cron').CronJob;
 const getAllMenus = require('../scraper/scraperManager');
 const { updateAllMenus, fetchWeeklyMenus } = require('../../models/menus');
 const onBreak = require('./breakScheduler');
@@ -10,16 +10,12 @@ const menusAreNew = (currentWeeklyMenus, newWeeklyMenus, onBreak) => {
     const serveries = ['north', 'west', 'south', 'seibel', 'baker'];
 
     const isNew = { north: false, west: false, south: false, seibel: false, baker: false };
-
     for (servery of serveries) {
         const serveryMenuIsNew = !deepEqual(currentWeeklyMenus[servery], newWeeklyMenus[servery]);
 
-        if (serveryMenuIsNew) {
-            isNew[servery] = true;
-        }
+        if (serveryMenuIsNew) isNew[servery] = true;
 
         if (onBreak) {
-            // combinations of possible serveries on break
             // There is a possibility for a false positive if another servery is open and hasn't been updated but one of these combination of serveries has been updated.
             // Not sure if there is a good solution to that other than monitoring which serveries are open during break and changing these conditions to accomodate that.
             if ((isNew.north && isNew.south) || (isNew.north && isNew.seibel) || (isNew.west && isNew.south) || (isNew.west && isNew.seibel)) {
@@ -27,45 +23,87 @@ const menusAreNew = (currentWeeklyMenus, newWeeklyMenus, onBreak) => {
             }
         }
 
-        // There's only a possibility for a false negative if a servery is closed for 2+ weeks and not updated. I accounted for this with onBreak variable.
-        // Otherwise, every single servery menu should be updated on Monday.
-        if (isNew.north && isNew.west && isNew.south && isNew.seibel && isNew.baker) {
-            return true;
-        }
+        if (isNew.north && isNew.west && isNew.south && isNew.seibel && isNew.baker) return true;
     }
 
     return false;
 };
 
-// cron translation: At 10:20 on Monday
-const monUpdate = cron.schedule('20 10 * * 1', async () => {
+// returns true if menus have been updated, false otherwise
+const updateMenusIfNew = async () => {
     const newWeeklyMenus = await getAllMenus();
-
     const currentWeeklyMenus = await fetchWeeklyMenus();
-    const newMenusAreNew = await menusAreNew(currentWeeklyMenus, newWeeklyMenus, onBreak);
-    if (newMenusAreNew) {
-        await updateAllMenus(newWeeklyMenus);
-    } else {
-        // do something
-    }
-}, { timezone: 'America/Chicago', scheduled: false });
 
-// description: update menus 
-// cron translation: At 10:20 on every day of the week from Tuesday through Sunday
-const tuesThroughSunUpdate = cron.schedule('20 10 * * 2-7', async () => {
-    const newWeeklyMenus = await getAllMenus();
-
-    const currentWeeklyMenus = await fetchWeeklyMenus();
-    const newMenusAreNew = await menusAreNew(currentWeeklyMenus, newWeeklyMenus, onBreak);
+    const newMenusAreNew = menusAreNew(currentWeeklyMenus, newWeeklyMenus, onBreak);
 
     if (newMenusAreNew) {
         await updateAllMenus(newWeeklyMenus);
+        return true;
     }
-}, { timezone: 'America/Chicago', scheduled: false });
+
+    return false;
+};
+
+// acounts for the case where menus aren't updated by 9:50
+const monUpdateIfDelayedScheduler = new CronJob({
+    cronTime: '*/10 10-13 * * 1',
+    onTick: async () => {
+        if (delayTexts) {
+            const menusUpdated = await updateMenusIfNew();
+
+            if (menusUpdated) {
+                delayTexts = false;
+                monUpdateIfDelayedScheduler.stop();
+            }
+        }
+    },
+    timeZone: 'America/Chicago'
+});
+
+const monUpdateScheduler = new CronJob({
+    cronTime: '50 9 * * 1',
+    onTick: async () => {
+        const menusUpdated = await updateMenusIfNew();
+
+        if (!menusUpdated) {
+            delayTexts = true;
+            monUpdateIfDelayedScheduler.start();
+        }
+    },
+    timeZone: 'America/Chicago'
+});
+
+const monUpdateDelayedCleanupScheduler = new CronJob({
+    cronTime: '25 13 * * 1',
+    onTick: () => {
+        delayTexts = false;
+        monUpdateIfDelayedScheduler.stop();
+    },
+    timeZone: 'America/Chicago'
+});
+
+const tuesThroughSunLunUpdateScheduler = new CronJob({
+    cronTime: '50 9 * * 0,2-6',
+    onTick: async () => {
+        await updateMenusIfNew();
+    },
+    timeZone: 'America/Chicago'
+});
+
+const dailyDinUpdateScheduler = new CronJob({
+    cronTime: '50 15 * * *',
+    onTick: async () => {
+        await updateMenusIfNew();
+    },
+    timeZone: 'America/Chicago'
+});
+
 
 const startUpdateSchedulers = () => {
-    monUpdate.start();
-    tuesThroughSunUpdate.start();
+    monUpdateScheduler.start();
+    monUpdateDelayedCleanupScheduler.start();
+    tuesThroughSunLunUpdateScheduler.start();
+    dailyDinUpdateScheduler.start();
 };
 
 if (process.env.NODE_ENV === 'test') {
