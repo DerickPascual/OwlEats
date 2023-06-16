@@ -1,6 +1,6 @@
 const pool = require('./db');
 
-// maybe use bcrypt?
+// maybe use bcrypt for phone nums?
 
 // CREATE USER
 const createUser = async (phone_number, serveries=[], allergens=[], diets=[]) => {
@@ -17,13 +17,30 @@ const createUser = async (phone_number, serveries=[], allergens=[], diets=[]) =>
 
 // READ USER
 const fetchAllUsers = async () => {
-    const res = await pool.query(`SELECT * FROM USERS`)
+    const res = await pool.query(`SELECT * FROM users`)
         .catch((err) => {
             console.error;
         });
     return res.rows;
-}
+};
 
+const fetchUserById = async (id) => {
+    const res = await pool.query(`SELECT * FROM users WHERE id=$1`, [id])
+        .catch((err) => {
+            console.error;
+        });
+
+    return res;
+};
+
+const fetchUserByPhone = async (phone_number) => {
+    const res = await pool.query(`SELECT * FROM users WHERE phone_number=$1`, [phone_number])
+        .catch((err) => {
+            console.error;
+        });
+
+    return res;
+}
 
 // DELETE USER
 const deleteUser = async (id) => {
@@ -33,9 +50,9 @@ const deleteUser = async (id) => {
         });
 
     return res;
-}
+};
 
-module.exports = { fetchAllUsers };
+module.exports = { createUser, fetchAllUsers, fetchUserById, deleteUser };
 
 /*
 const createUsersQuery = `CREATE TABLE users (

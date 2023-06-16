@@ -73,6 +73,7 @@ const monUpdateScheduler = new CronJob({
     timeZone: 'America/Chicago'
 });
 
+// runs in case menus aren't updated by 13:25. Then, a monday lunch text won't be sent.
 const monUpdateDelayedCleanupScheduler = new CronJob({
     cronTime: '25 13 * * 1',
     onTick: () => {
@@ -90,6 +91,7 @@ const tuesThroughSunLunUpdateScheduler = new CronJob({
     timeZone: 'America/Chicago'
 });
 
+// can run this without manipulating delayTexts since I've never seen menus not be updated by dinner.
 const dailyDinUpdateScheduler = new CronJob({
     cronTime: '50 15 * * *',
     onTick: async () => {

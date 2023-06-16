@@ -1,4 +1,4 @@
-const scraper = require('../../background_tasks/scraper/scraper');
+const scraper = require('../background_tasks/scraper/scraper');
 const puppeteer = require('puppeteer');
 
 describe("NORTH SERVERY TESTS", () => {

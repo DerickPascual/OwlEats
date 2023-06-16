@@ -1,9 +1,12 @@
 const CronJob = require('cron').CronJob;
-const { delayTexts } = require('./scraperScheduler');
+const { delayTexts } = require('./updateScheduler');
 const { fetchAllUsers } = require('../../models/users');
 const { fetchMenus } = require('../../models/menus');
 const { sendAllTexts } = require('../texts/textSender');
 const { DateTime } = require('luxon');
+
+// this isn't really necessary 
+let mondayTextsSent = false;
 
 const getWeekday = () => {
     const dt = DateTime.now().setZone('America/Chicago');
@@ -34,33 +37,36 @@ const sendTexts = async (mealtime) => {
     await sendAllTexts(menus, users, mealtime);
 };
 
-// runs until 12:50 checking if texts still need to be delayed. After 12:50, if menus are not updated, no texts will be sent.
+// runs until 12:55 checking if texts still need to be delayed. After 12:55, if menus are not updated, no texts will be sent.
 const monLunchTextScheduler = new CronJob({
-    cronTime: '*/10 10-12 * * 1',
+    cronTime: '*/5 10-12 * * 1',
     onTick: async () => {
-        if (!delayTexts) {
+        // mondayTextsSent flag is unecessary but it's here for my peace of mind lol, just in case the scheduler doesn't stop so the program doesn't spam people.
+        if (!delayTexts && !mondayTextsSent) {
             await sendTexts('lunch');
+            mondayTextsSent = true;
             monLunchTextScheduler.stop();
         }
     },
-    timeZone: 'American/Chicago'
+    timeZone: 'America/Chicago'
 });
 
 // restarts the monday scheduler if texts have been sent
 const monLunchTextRestartScheduler = new CronJob({
     cronTime: '30 13 * * 1',
     onTick: () => {
+        mondayTextsSent = false;
         monLunchTextScheduler.start();
     },
-    timeZone: 'American/Chicago'
-})
+    timeZone: 'America/Chicago'
+});
     
 const tuesThroughSunLunchTextScheduler = new CronJob({
     cronTime: '0 10 * * 0,2-6',
     onTick: async () => {
         await sendTexts('lunch');
     },
-    timeZone: 'American/Chicago'
+    timeZone: 'America/Chicago'
 });
 
 const dinnerTextScheduler = new CronJob({

@@ -1,4 +1,4 @@
-const { menusAreNew } = require('./scraperScheduler');
+const { menusAreNew } = require('./updateScheduler');
 
 describe('menusAreNew tests', () => {
     describe('Menus are empty', () => {
