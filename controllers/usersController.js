@@ -1,18 +1,24 @@
 const asyncHandler = require('express-async-handler');
 const { insertUser, fetchUserById, fetchUserByPhone, updateUser, deleteUser } = require('../models/users')
-const { parsePhoneNumber, isValidPhoneNumber } = require('libphonenumber-js');
+const { isValidPhoneNumber, PhoneNumber } = require('libphonenumber-js');
 
 // CREATE USER
 const createNewUser = asyncHandler(async (req, res) => {
-    const { phone_number } = req.body;
-
-    if (!isValidPhoneNumber(phone_number)) {
-        const error = new Error(message = 'Invalid phone number');
+    if (!req.body) {
+        const error = new Error('Request body not found');
         error.statusCode = 400;
         throw error;
     }
 
-    const duplicate = await fetchUserByPhone(phone_number);
+    const { phoneNumber } = req.body;
+
+    if (!isValidPhoneNumber(phoneNumber)) {
+        const error = new Error('Invalid phone number');
+        error.statusCode = 400;
+        throw error;
+    }
+
+    const duplicate = await fetchUserByPhone(phoneNumber);
 
     if (duplicate) {
         const error = new Error('Phone number already registered');
@@ -20,25 +26,26 @@ const createNewUser = asyncHandler(async (req, res) => {
         throw error;
     }
 
-    const user = await insertUser(phone_number);
+    const user = await insertUser(phoneNumber);
 
     res.status(201).json(user);
 });
 
 // READ USER
 const getUser = asyncHandler(async (req, res) => {
-    const { phone_number, id } = req.body;
+    if (!req.body) {
+        const error = new Error('Request body not found');
+        error.statusCode = 400;
+        throw error;
+    }
 
+    const { phoneNumber, id } = req.body;
+
+    let user;
     if (id && parseInt(id)) {
-        const user = await fetchUserById(id);
-    } else if (phone_number) {
-        if (!isValidPhoneNumber(phone_number)) {
-            const error = new Error(message = 'Invalid phone number');
-            error.statusCode = 400;
-            throw error;
-        }
-
-        const user = await fetchUserByPhone(phone_number);
+        user = await fetchUserById(id);
+    } else if (phoneNumber && isValidPhoneNumber(phoneNumber)) {
+        user = await fetchUserByPhone(phoneNumber);
     } else {
         const error = new Error('Invalid phone number or id');
         error.statusCode = 400;
@@ -56,15 +63,52 @@ const getUser = asyncHandler(async (req, res) => {
 
 //UPDATE USER
 const updateUserSettings = asyncHandler(async (req, res) => {
-    const { id, phone_number, serveries, allergens, diets } = req.body;
+    if (!req.body) {
+        const error = new Error('Request body not found');
+        error.statusCode = 400;
+        throw error;
+    }
 
-    if (!id || !parseInt(id) || !phone_number || !isValidPhoneNumber(phone_number) || !Array.isArray(serveries) || !Array.isArray(allergens) || !Array.isArray(diets)) {
+    const { id, phoneNumber, serveries, allergens, diets } = req.body;
+
+    if (!id || !phoneNumber || !Array.isArray(serveries) || !Array.isArray(allergens) || !Array.isArray(diets)) {
         const error = new Error('All inputs are required');
         error.statusCode = 400;
         throw error;
     }
 
-    const user = await updateUser(id, phone_number, serveries, allergens, diets);
+    if (!parseInt(id)) {
+        const error = new Error('Invalid id');
+        error.statusCode = 400;
+        throw error;
+    }
+
+    if (!isValidPhoneNumber(phoneNumber)) {
+        const error = new Error('Invalid phone number');
+        error.statusCode = 400;
+        throw error;
+    }
+
+    if (!serveries.every(servery => (servery === 'north' || servery === 'south' || servery === 'west' || servery === 'seibel' || servery === 'baker'))) {
+        const error = new Error('Invalid value in serveries array');
+        error.statusCode = 400;
+        throw error;
+    }
+
+    const possibleAllergens = ['gluten', 'soy', 'dairy', 'eggs', 'fish', 'shellfish', 'peanuts', 'treenuts', 'sesame'];
+    if (!allergens.every(allergen => possibleAllergens.includes(allergen))) {
+        const error = new Error('Invalid value in allergens array');
+        error.statusCode = 400;
+        throw error;
+    }
+
+    if (!diets.every(diet => (diet === 'vegetarian' || diet === 'vegan' || diet === 'halal'))) {
+        const error = new Error('Invalid value in diets array');
+        error.statusCode = 400;
+        throw error;
+    }
+
+    const user = await updateUser(id, phoneNumber, serveries, allergens, diets);
     if (!user) {
         const error = new Error('User not found');
         error.statusCode = 404;
@@ -76,6 +120,12 @@ const updateUserSettings = asyncHandler(async (req, res) => {
 
 // delete USER
 const deleteUserById = asyncHandler(async (req, res) => {
+    if (!req.body) {
+        const error = new Error('Request body not found');
+        error.statusCode = 400;
+        throw error;
+    }
+
     const { id } = req.body;
 
     if (!id || !parseInt(id)) {
@@ -91,8 +141,8 @@ const deleteUserById = asyncHandler(async (req, res) => {
         throw error;
     }
 
-    res.status(204);
+    res.status(200).json( { message: "User deleted", user: user });
 });
 
-module.exports = { createNewUser, getUser, updateUserSettings, deleteUserById }
+module.exports = { createNewUser, getUser, updateUserSettings, deleteUserById };
 

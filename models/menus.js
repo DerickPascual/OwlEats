@@ -1,4 +1,4 @@
-const pool = require('./db');
+const pool = require('../db');
 
 // updates all menus and mealtimes of DB given the menu of all serveries we get from getAllMenus
 const updateAllMenus = async (menus) => {

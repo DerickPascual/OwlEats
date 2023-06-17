@@ -1,5 +1,3 @@
-1. Unit test user routes with jest
-2. Test user routes with postman
-2. create login/registration routes, authentication middleware, 
-3. express-session
-2. Front end
+1. create login/registration routes, authentication middleware, 
+2. express-session
+3. Front end

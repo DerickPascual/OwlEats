@@ -1,20 +1,21 @@
-const pool = require('./db');
+const pool = require('../db');
+const camelcaseKeys = require('camelcase-keys');
 
 // maybe use bcrypt for phone nums?
 
 // CREATE USER
-const insertUser = async (phone_number, serveries = [], allergens = [], diets = []) => {
+const insertUser = async (phoneNumber, serveries = [], allergens = [], diets = []) => {
     const res = await pool.query(`
     INSERT INTO users (phone_number, serveries, allergens, diets) 
     VALUES ($1, $2, $3, $4)
     RETURNING *
-    `, [phone_number, serveries, allergens, diets])
+    `, [phoneNumber, serveries, allergens, diets])
         .catch((err) => {
             console.error(`Error inserting user into database: ${err}`);
             throw err;
         });
 
-    return res.rows[0];
+    return camelcaseKeys(res.rows[0]);
 };
 
 // READ USER
@@ -25,7 +26,7 @@ const fetchAllUsers = async () => {
             throw err;
         });
 
-    return res.rows;
+    return camelcaseKeys(res.rows);
 };
 
 const fetchUserById = async (id) => {
@@ -35,33 +36,33 @@ const fetchUserById = async (id) => {
             throw err;
         });
 
-    return res.rows[0];
+    return camelcaseKeys(res.rows[0]);
 };
 
-const fetchUserByPhone = async (phone_number) => {
-    const res = await pool.query(`SELECT * FROM users WHERE phone_number=$1`, [phone_number])
+const fetchUserByPhone = async (phoneNumber) => {
+    const res = await pool.query(`SELECT * FROM users WHERE phone_number=$1`, [phoneNumber])
         .catch((err) => {
             console.error(`Error fetching user by phone: ${err}`);
             throw err;
         });
 
-    return res.rows[0];
+    return camelcaseKeys(res.rows[0]);
 }
 
 // UPDATE USER
-const updateUser = async (id, phone_number, serveries, allergens, diets) => {
+const updateUser = async (id, phoneNumber, serveries, allergens, diets) => {
     const res = await pool.query(`
         UPDATE users
         SET phone_number=$1, serveries=$2, allergens=$3, diets=$4
         WHERE id=$5
         RETURNING *
-    `, [phone_number, serveries, allergens, diets, id])
+    `, [phoneNumber, serveries, allergens, diets, id])
         .catch((err) => {
             console.error(`Error updating user: ${err}`);
             throw err;
         })
 
-    return res.rows[0]
+    return camelcaseKeys(res.rows[0]);
 }
 
 
@@ -77,7 +78,7 @@ const deleteUser = async (id) => {
             throw err;
         });
 
-    return res.rows[0];
+    return camelcaseKeys(res.rows[0]);
 };
 
 module.exports = { insertUser, fetchAllUsers, fetchUserById, fetchUserByPhone, updateUser, deleteUser };
@@ -87,7 +88,7 @@ module.exports = { insertUser, fetchAllUsers, fetchUserById, fetchUserByPhone, u
 /*
 const createUsersQuery = `CREATE TABLE users (
     id SERIAL PRIMARY KEY,
-    phone_number TEXT,
+    phoneNumber TEXT,
     serveries TEXT[],
     allergens TEXT[],
     diets TEXT[],
