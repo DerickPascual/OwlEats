@@ -12,7 +12,7 @@ const createNewUser = asyncHandler(async (req, res) => {
 
     const { phoneNumber } = req.body;
 
-    if (!isValidPhoneNumber(phoneNumber)) {
+    if (!phoneNumber || !isValidPhoneNumber(phoneNumber)) {
         const error = new Error('Invalid phone number');
         error.statusCode = 400;
         throw error;

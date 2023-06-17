@@ -1,3 +1,2 @@
-1. create login/registration routes, authentication middleware, 
-2. express-session
+1.registration route authentication middleware 
 3. Front end

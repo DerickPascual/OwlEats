@@ -1,18 +1,9 @@
 const asyncHandler = require('express-async-handler');
 const { fetchUserByPhone } = require('../models/users');
 const { isValidPhoneNumber } = require('libphonenumber-js');
+const { sendVerificationText } = require('../twilio/verification');
 
-const accountSid = process.env.TWILIO_ACCOUNT_SID;
-const authToken = process.env.TWILIO_AUTH_TOKEN;
-const serviceSid = process.env.TWILIO_SERVICE_SID;
-const client = require('twilio')(accountSid, authToken);
-
-const sendTwilioVerificationText = (phoneNumber) => {
-    client.verify.v2.services(serviceSid)
-        .verifications
-}
-
-const handleInitialRegistration = asyncHandler(async (req, res) => {
+const handleRegister = asyncHandler(async (req, res) => {
     if (!req.body) {
         const error = new Error('Request body not found');
         error.statusCode = 400;
@@ -33,4 +24,15 @@ const handleInitialRegistration = asyncHandler(async (req, res) => {
         error.statusCode = 409;
         throw error;
     }
-})
+
+    sendVerificationText(phoneNumber);
+    req.session.inVerification = true;
+
+    res.status(302).redirect('/verify');
+});
+
+if (process.env.NODE_ENV === 'test') {
+    module.exports = { sendTwilioVerificationText: sendVerificationText, handleRegister };
+} else {
+    module.exports = { handleRegister };
+}

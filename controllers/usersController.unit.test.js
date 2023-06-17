@@ -20,6 +20,21 @@ describe('createNewUser tests', () => {
         await expect(createNewUser(req, res)).rejects.toStrictEqual(error);
     });
 
+    describe('Tests with no phone number', () => {
+        const req = {
+            body: {}
+        }
+
+        const res = {};
+
+        test('No phone number', async () => {
+            const error = new Error('Invalid phone number');
+            error.statusCode = 400;
+
+            await expect(createNewUser(req, res)).rejects.toStrictEqual(error);
+        });
+    });
+
 
     describe('Tests with real phone number with country code', () => {
         const req = {

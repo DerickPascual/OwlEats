@@ -1,21 +1,5 @@
-require('dotenv').config();
 const { createTxt } = require('./textCreator');
-const { fetchAllUsers } = require('../../models/users');
-const { fetchMenus } = require('../../models/menus');
-
-const accountSid = process.env.TWILIO_ACCOUNT_SID;
-const authToken = process.env.TWILIO_AUTH_TOKEN;
-const client = require('twilio')(accountSid, authToken);
-
-const sendText = (phoneNumber, txt) => {
-    client.messages
-        .create({
-            body: txt,
-            to: phoneNumber,
-            from: process.env.TWILIO_PHONE_NUMBER
-        })
-        .then((message) => console.log(message.sid));
-}
+const { sendText } = require('../../twilio/messenger');
 
 const sendAllTexts = (menus, users, mealtime) => {
     for (user of users) {
