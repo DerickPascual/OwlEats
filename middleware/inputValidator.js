@@ -3,17 +3,17 @@ const inputValidator = (req, res, next) => {
         const error = new Error('Request body not found');
         error.statusCode = 400;
         next(error);
+    } else {
+        const { id } = req.body;
+
+        if (!id || !parseInt(id)) {
+            const error = new Error('Invalid id');
+            error.statusCode = 400;
+            next(error);
+        } else {
+            next();
+        }
     }
-
-    const { id } = req.body;
-
-    if (!id || !parseInt(id)) {
-        const error = new Error('Invalid id');
-        error.statusCode = 400;
-        next(error);
-    }
-
-    next();
 };
 
 module.exports = inputValidator;
