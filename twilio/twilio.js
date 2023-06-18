@@ -5,4 +5,4 @@ const authToken = process.env.TWILIO_AUTH_TOKEN;
 const serviceSid = process.env.TWILIO_SERVICE_SID;
 const client = require('twilio')(accountSid, authToken);
 
-module.exports = { client };
+module.exports = { client, serviceSid };

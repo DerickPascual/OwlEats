@@ -1,4 +1,4 @@
-const { sendTwilioVerificationText, handleRegister } = require('./registerController');
+const { handleRegister } = require('./registerController');
 const { sendVerificationText } = require('../twilio/verification');
 const { fetchUserByPhone } = require('../models/users');
 

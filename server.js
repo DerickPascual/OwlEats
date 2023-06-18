@@ -5,6 +5,8 @@ const path = require('path');
 const cors = require('cors');
 const session = require('express-session');
 const errorHandler = require('./middleware/errorHandler');
+const auth = require('./middleware/auth');
+const inputValidator = require('./middleware/inputValidator');
 const port = 3500;
 
 app.use(express.json());
@@ -23,9 +25,13 @@ app.use(session({
     cookie: { maxAge: 1000 * 60 * 60 * 24 * 7 }
 }));
 
-app.use('/users', require('./routes/userRoutes'));
-
 app.use('/login', require('./routes/loginRoutes'));
+
+app.use('/register', require('./routes/registerRoutes'));
+
+app.use('/verify', require('./routes/verifyRoutes'));
+
+app.use('/users', inputValidator, auth, require('./routes/userRoutes'));
 
 app.all('*', (req, res) => {
     console.log(req.session);

@@ -83,7 +83,7 @@ const deleteUser = async (id) => {
 
 module.exports = { insertUser, fetchAllUsers, fetchUserById, fetchUserByPhone, updateUser, deleteUser };
 
-
+// "id": "874866863435644929"
 
 /*
 const createUsersQuery = `CREATE TABLE users (

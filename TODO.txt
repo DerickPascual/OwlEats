@@ -1,2 +1,2 @@
-1.registration route authentication middleware 
-3. Front end
+1. 
+2. Front end !! :>
