@@ -9,12 +9,18 @@ const port = 3500;
 
 app.set("trust proxy", 1); 
 
+if (process.env.NODE_ENV === 'production') {
+    app.use(express.static(path.join(__dirname, './client/build')));
+}
+
 app.use(express.json());
 
-app.use(cors({
-    origin: ['https://localhost:3000'],
-    credentials: true
-}));
+if (process.env.NODE_ENV === 'development') {
+    app.use(cors({
+        origin: ['https://localhost:3000'],
+        credentials: true
+    }));
+}
 
 app.use(session({
     store: new (require('connect-pg-simple')(session))({
@@ -26,8 +32,8 @@ app.use(session({
     resave: true,
     saveUninitialized: true,
     cookie: { 
-        maxAge: 1000 * 60 * 60 * 24 * 7,
-}
+        maxAge: 1000 * 60 * 60 * 24 * 7
+    }
 }));
 
 app.use('/api/session', require('./routes/sessionRoutes'));
@@ -41,8 +47,9 @@ app.use('/api/verify', require('./routes/verifyRoutes'));
 app.use('/api/users', require('./routes/userRoutes'));
 
 app.all('*', (req, res) => {
-    console.log(req.session);
-    res.status(404).json({ error: { message: 'Resource not found' } }); 
+    if (process.env.NODE_ENV === 'production') {
+        res.sendFile(path.join(__dirname, 'client', 'build', 'index.html'));
+    }
 });
 
 app.use(errorHandler);
