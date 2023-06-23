@@ -1,7 +1,7 @@
 .checkbox-container {
     display: flex;
     align-items: center;
-    width: 100px;
+    width: 150px;
 }
 
 .checkbox {

@@ -11,7 +11,7 @@
 
 body {
   background-color: black;
-  font-family: 'SF Pro Bold' ,'sans serif';
+  font-family: 'SF Pro Bold' , sans-serif;
   color: rgb(234, 234, 234);
   display: flex;
   justify-content: center;
