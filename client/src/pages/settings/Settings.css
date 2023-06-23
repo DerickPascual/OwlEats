@@ -12,7 +12,7 @@
 
 .settings-form {
     width: 150px;
-    margin-left: 20px;
+    margin-left: 5vh;
     display: flex;
     justify-content: center;
 }
@@ -62,4 +62,10 @@
 .settings-submit-button:hover {
     cursor: pointer;
     background: rgb(27, 95, 179);
+}
+
+@media screen and (max-width: 800px) {
+    .settings-form {
+        margin-left: 20px;
+    }
 }
