@@ -70,7 +70,7 @@ const tuesThroughSunLunchTextScheduler = new CronJob({
 });
 
 const dinnerTextScheduler = new CronJob({
-    cronTime: '*/2 * * * *',
+    cronTime: '0 16 * * *',
     onTick: async () => {
         await sendTexts('dinner');
     },
