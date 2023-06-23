@@ -78,7 +78,8 @@ const restructureMenus = (menus) => {
 
 const getMenus = async (url) => {
     const browser = await puppeteer.launch({
-        headless: "new"
+        headless: true,
+        args: ["--no-sandbox", "--disable-setuid-sandbox"]
     });
 
     let menus = await scraper(browser, url);
