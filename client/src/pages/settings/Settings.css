@@ -7,12 +7,12 @@
 }
 
 .settings-description {
-    width: 50%;
+    width: 50vw;
 }
 
 .settings-form {
     width: 150px;
-    margin-left: 5vh;
+    margin-left: 5vw;
     display: flex;
     justify-content: center;
 }
