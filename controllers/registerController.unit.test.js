@@ -61,7 +61,7 @@ describe('handleRegisterTests', () => {
 
         const res = {
             status: jest.fn().mockReturnThis(),
-            redirect: jest.fn()
+            json: jest.fn()
         };
 
         fetchUserByPhone.mockResolvedValue(undefined)
@@ -69,7 +69,7 @@ describe('handleRegisterTests', () => {
 
         expect(sendVerificationText).toHaveBeenCalledWith(req.body.phoneNumber);
         expect(req.session.inVerification).toBe(true);
-        expect(res.status).toHaveBeenCalledWith(302);
-        expect(res.redirect).toHaveBeenCalledWith('/verify');
+        expect(res.status).toHaveBeenCalledWith(200);
+        expect(res.json).toHaveBeenCalled();
     })
 })

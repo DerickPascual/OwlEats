@@ -5,33 +5,40 @@ const path = require('path');
 const cors = require('cors');
 const session = require('express-session');
 const errorHandler = require('./middleware/errorHandler');
-const auth = require('./middleware/auth');
-const inputValidator = require('./middleware/inputValidator');
 const port = 3500;
+
+app.set("trust proxy", 1); 
 
 app.use(express.json());
 
 app.use(cors({
-    origin: ['http://localhost:3000']
+    origin: ['https://localhost:3000'],
+    credentials: true
 }));
 
 app.use(session({
     store: new (require('connect-pg-simple')(session))({
         conString: process.env.DATABASE_URL,
+        tableName: 'session'
     }),
     secret: process.env.SESSION_SECRET_KEY,
+    proxy: true,
     resave: true,
     saveUninitialized: true,
-    cookie: { maxAge: 1000 * 60 * 60 * 24 * 7 }
+    cookie: { 
+        maxAge: 1000 * 60 * 60 * 24 * 7,
+}
 }));
 
-app.use('/login', require('./routes/loginRoutes'));
+app.use('/api/session', require('./routes/sessionRoutes'));
 
-app.use('/register', require('./routes/registerRoutes'));
+app.use('/api/login', require('./routes/loginRoutes'));
 
-app.use('/verify', require('./routes/verifyRoutes'));
+app.use('/api/register', require('./routes/registerRoutes'));
 
-app.use('/users', inputValidator, auth, require('./routes/userRoutes'));
+app.use('/api/verify', require('./routes/verifyRoutes'));
+
+app.use('/api/users', require('./routes/userRoutes'));
 
 app.all('*', (req, res) => {
     console.log(req.session);

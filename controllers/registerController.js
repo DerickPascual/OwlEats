@@ -27,12 +27,18 @@ const handleRegister = asyncHandler(async (req, res) => {
 
     sendVerificationText(phoneNumber);
     req.session.inVerification = true;
+    req.session.phoneNumber = phoneNumber;
 
-    res.status(302).redirect('/verify');
+    res.status(200).json({ message: 'Success' });
 });
 
-if (process.env.NODE_ENV === 'test') {
-    module.exports = { sendTwilioVerificationText: sendVerificationText, handleRegister };
-} else {
-    module.exports = { handleRegister };
-}
+const getRegisterInfo = asyncHandler(async (req, res) => {
+    const responseObject = { 
+        inVerification: req.session.inVerification,
+        phoneNumber: req.session.phoneNumber,
+    }
+
+    res.status(200).json(responseObject);
+})
+
+module.exports = { getRegisterInfo, handleRegister }

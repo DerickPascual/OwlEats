@@ -1,17 +1,15 @@
 const scraper = require('./scraper');
 const puppeteer = require('puppeteer');
 const path = require('path');
-const deepEqual = require('deep-equal');
-
 
 describe("Menus test with empty menus and some no name mitems", () => {
     let browser;
     let menus;
-    const url = path.join(__dirname, 'mock_pages', 'northMenus_6_13_23.html');
+    const url = `file://${path.join(__dirname, 'mock_pages', 'northMenus_6_13_23.html')}`
 
     beforeAll(async () => {
         browser = await puppeteer.launch({
-            headless: false
+          headless: "new"
         });
         menus = await scraper(browser, url);
     });

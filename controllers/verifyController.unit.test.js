@@ -22,8 +22,9 @@ describe('handleVerify tests', () => {
         await expect(handleVerify(req, res)).rejects.toStrictEqual(error);
     });
 
-    test('No phone in req body', async () => {
+    test('No phone in req session', async () => {
         const req = {
+            session: {},
             body: {}
         };
         const res = {};
@@ -34,9 +35,10 @@ describe('handleVerify tests', () => {
         await expect(handleVerify(req, res)).rejects.toStrictEqual(error);
     });
 
-    test('Invalid phone in req body', async () => {
+    test('Invalid phone in req session', async () => {
         const req = {
-            body: { phoneNumber: 'abcdefg' }
+            session: { phoneNumber: 'abcdefg '},
+            body: { }
         };
         const res = {};
 
@@ -48,7 +50,8 @@ describe('handleVerify tests', () => {
 
     test('No verificationCode in body', async () => {
         const req = {
-            body: { phoneNumber: '+12065550100' }
+            session: { phoneNumber: '+12065550100' },
+            body: {}
         };
         const res = {};
 
@@ -60,7 +63,8 @@ describe('handleVerify tests', () => {
 
     test('checkVerificationText does not return approved', async () => {
         const req = {
-            body: { phoneNumber: '+12065550100', verificationCode: '123' }
+            session: { phoneNumber: '+12065550100' },
+            body: { verificationCode: '123' }
         };
         const res = {};
 
@@ -74,7 +78,8 @@ describe('handleVerify tests', () => {
 
     test('Phone number already registered', async () => {
         const req = {
-            body: { phoneNumber: '+12065550100', verificationCode: '123' }
+            session: { phoneNumber: '+12065550100' },
+            body: { verificationCode: '123' }
         };
         const res = {};
 
@@ -90,25 +95,24 @@ describe('handleVerify tests', () => {
 
     test('Valid phone number, verification code', async () => {
         const req = {
-            body: { phoneNumber: '+12065550100', verificationCode: '123' },
-            session: {}
+            body: { verificationCode: '123' },
+            session: { phoneNumber: '+12065550100'}
         };
         const res = {
             status: jest.fn().mockReturnThis(),
-            redirect: jest.fn()
+            json: jest.fn()
         };
 
         checkVerificationText.mockResolvedValue('approved');
 
         fetchUserByPhone.mockResolvedValue(undefined);
 
-        insertUser.mockResolvedValue(req.body);
+        insertUser.mockResolvedValue(req.session);
 
         await handleVerify(req, res);
 
-        expect(req.session.user).toStrictEqual(req.body);
         expect(req.session.inVerification).toStrictEqual(false);
-        expect(res.status).toHaveBeenCalledWith(302);
-        expect(res.redirect).toHaveBeenCalledWith('/settings');
+        expect(res.status).toHaveBeenCalledWith(200);
+        expect(res.json).toHaveBeenCalled();
     });
 });

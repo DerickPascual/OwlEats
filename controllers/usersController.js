@@ -2,33 +2,12 @@ const asyncHandler = require('express-async-handler');
 const { fetchUserById, fetchUserByPhone, updateUser, deleteUser } = require('../models/users')
 const { isValidPhoneNumber } = require('libphonenumber-js');
 
-// READ USER
-const getUser = asyncHandler(async (req, res) => {
-    const { id } = req.body;
-
-    const user = await fetchUserById(id);
-
-    if (!user) {
-        const error = new Error('User not found');
-        error.statusCode = 404;
-        throw error;
-    }
-
-    res.status(200).json(user);
-});
-
 //UPDATE USER
 const updateUserSettings = asyncHandler(async (req, res) => {
-    const { id, phoneNumber, serveries, allergens, diets } = req.body;
+    const { serveries, allergens, diets } = req.body;
 
-    if (!id || !phoneNumber || !Array.isArray(serveries) || !Array.isArray(allergens) || !Array.isArray(diets)) {
+    if (!Array.isArray(serveries) || !Array.isArray(allergens) || !Array.isArray(diets)) {
         const error = new Error('All inputs are required');
-        error.statusCode = 400;
-        throw error;
-    }
-
-    if (!isValidPhoneNumber(phoneNumber)) {
-        const error = new Error('Invalid phone number');
         error.statusCode = 400;
         throw error;
     }
@@ -52,19 +31,26 @@ const updateUserSettings = asyncHandler(async (req, res) => {
         throw error;
     }
 
-    const user = await updateUser(id, phoneNumber, serveries, allergens, diets);
-    if (!user) {
+    const user = req.session.user;
+    const id = user.id;
+    const phoneNumber = user.phoneNumber;
+
+    const updatedUser =  await updateUser(id, phoneNumber, serveries, allergens, diets);
+
+    if (!updatedUser) {
         const error = new Error('User not found');
         error.statusCode = 404;
         throw error;
     }
 
-    res.status(200).json(user);
+    req.session.user = updatedUser;
+
+    res.status(200).json(updatedUser);
 });
 
 // delete USER
 const deleteUserById = asyncHandler(async (req, res) => {
-    const { id } = req.body;
+    const id = req.session.user.id;
 
     const user = await deleteUser(id);
     if (!user) {
@@ -73,8 +59,10 @@ const deleteUserById = asyncHandler(async (req, res) => {
         throw error;
     }
 
+    req.session.destroy();
+
     res.status(200).json( { message: "User deleted", user: user });
 });
 
-module.exports = { getUser, updateUserSettings, deleteUserById };
+module.exports = { updateUserSettings, deleteUserById };
 

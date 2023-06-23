@@ -10,7 +10,8 @@ const handleVerify = asyncHandler(async (req, res) => {
         throw error;
     }
 
-    const { phoneNumber, verificationCode } = req.body
+    const { verificationCode } = req.body
+    const phoneNumber = req.session.phoneNumber;
 
     if (!phoneNumber || !isValidPhoneNumber(phoneNumber)) {
         const error = new Error('Invalid phone number');
@@ -24,7 +25,12 @@ const handleVerify = asyncHandler(async (req, res) => {
         throw error;
     }
 
-    const result = await checkVerificationText(phoneNumber, verificationCode);
+    const result = await checkVerificationText(phoneNumber, verificationCode)
+        .catch((err) => {
+            const error = new Error('Invalid verification code');
+            error.statusCode = 400;
+            throw error;
+        })
 
     if (result !== 'approved') {
         const error = new Error('Invalid verification code');
@@ -41,9 +47,8 @@ const handleVerify = asyncHandler(async (req, res) => {
 
     const user = await insertUser(phoneNumber);
     req.session.user = user;
-
     req.session.inVerification = false;
-    res.status(302).redirect('/settings');
+    res.status(200).json(user);
 });
 
 module.exports = { handleVerify };

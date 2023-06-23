@@ -78,7 +78,7 @@ const restructureMenus = (menus) => {
 
 const getMenus = async (url) => {
     const browser = await puppeteer.launch({
-        headless: false
+        headless: "new"
     });
 
     let menus = await scraper(browser, url);

@@ -4,9 +4,16 @@ const auth = (req, res, next) => {
         error.statusCode = 401;
         next(error);
     } else {
-        const { id } = req.body;
+        let parsedId;
+        if (req.method === 'GET') {
+            const { id } = req.query;
+            parsedId = id;
+        } else {
+            const { id } = req.body;
+            parsedId = id;
+        }
 
-        if (id !== req.session.user.id) {
+        if (parsedId !== req.session.user.id) {
             const error = new Error('Request ID does not match ID associated with session');
             error.statusCode = 401;
             next(error);

@@ -1,3 +1,5 @@
+const { PricingV2TrunkingCountryInstanceOriginatingCallPrices } = require("twilio/lib/rest/pricing/v2/country");
+
 const scraper = async (browser, url) => {
     let page = await browser.newPage();
     await page.goto(url);

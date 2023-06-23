@@ -1,4 +1,4 @@
-const { getUser, updateUserSettings, deleteUserById } = require('./usersController');
+const { updateUserSettings, deleteUserById } = require('./usersController');
 const { fetchUserById, fetchUserByPhone, updateUser, deleteUser } = require('../models/users');
 
 jest.mock('../models/users', () => ({
@@ -7,43 +7,6 @@ jest.mock('../models/users', () => ({
     updateUser: jest.fn(),
     deleteUser: jest.fn()
 }));
-
-
-describe('getUser tests', () => {
-    const req = {
-        body: { id: '123' }
-    };
-
-    const res = {
-        status: jest.fn().mockReturnThis(),
-        json: jest.fn()
-    };
-
-    test('ID is valid and belongs to a user', async () => {
-        const user = {
-            id: '123',
-            phoneNumber: '123',
-            serveries: ['west', 'north'],
-            allergens: [],
-            diets: []
-        }
-        fetchUserById.mockResolvedValue(user);
-
-        await getUser(req, res);
-
-        expect(res.status).toHaveBeenCalledWith(200);
-        expect(res.json).toHaveBeenCalledWith(user);
-    });
-
-    test('ID is not valid', async () => {
-        fetchUserById.mockResolvedValue(undefined);
-
-        const error = new Error('User not found');
-        error.statusCode = 404;
-
-        await expect(getUser(req, res)).rejects.toStrictEqual(error);
-    });
-});
 
 describe('updateUserSettings tests', () => {
     describe('Tests not containing all inputs', () => {
@@ -62,25 +25,6 @@ describe('updateUserSettings tests', () => {
     });
 
     describe('Tests containing all inputs but one invalid', () => {
-        test('Invalid phone test', async () => {
-            const req = {
-                body: {
-                    id: '123',
-                    phoneNumber: '2065550100',
-                    serveries: ['north', 'west'],
-                    allergens: [],
-                    diets: []
-                }
-            };
-
-            const res = {};
-
-            const error = new Error('Invalid phone number');
-            error.statusCode = 400;
-
-            await expect(updateUserSettings(req, res)).rejects.toStrictEqual(error);
-        });
-
         test('Invalid serveries test', async () => {
             const req = {
                 body: {
@@ -142,6 +86,9 @@ describe('updateUserSettings tests', () => {
     describe('Valid inputs tests', () => {
         test('No user associated with id', async () => {
             const req = {
+                session: {
+                    user: { id: '123 '}
+                },
                 body: {
                     id: '123',
                     phoneNumber: '+12065550100',
@@ -163,6 +110,9 @@ describe('updateUserSettings tests', () => {
 
         test('User associated with id', async () => {
             const req = {
+                session: {
+                    user: { id: '123 '}
+                },
                 body: {
                     id: '123',
                     phoneNumber: '+12065550100',
@@ -177,12 +127,12 @@ describe('updateUserSettings tests', () => {
                 json: jest.fn()
             };
 
-            updateUser.mockResolvedValue(req.body);
+            updateUser.mockResolvedValue(req.session.user);
 
             await updateUserSettings(req, res);
 
             expect(res.status).toHaveBeenCalledWith(200);
-            expect(res.json).toHaveBeenCalledWith(req.body);
+            expect(res.json).toHaveBeenCalledWith(req.session.user);
         });
     });
 });
@@ -190,7 +140,7 @@ describe('updateUserSettings tests', () => {
 describe('deleteUser tests', () => {
     test('id not in db', async () => {
         const req = {
-            body: { id: '123' }
+            session: { user: { id: '123' } }
         };
 
         const res = {};
@@ -205,7 +155,10 @@ describe('deleteUser tests', () => {
 
     test('id in db', async () => {
         const req = {
-            body: { id: '123' }
+            session: { 
+                user: { id: '123' } ,
+                destroy: jest.fn()
+        }
         };
 
         const res = {
@@ -213,11 +166,12 @@ describe('deleteUser tests', () => {
             json: jest.fn()
         };
 
-        deleteUser.mockResolvedValue(req.body);
+        deleteUser.mockResolvedValue(req.session.user);
 
         await deleteUserById(req, res);
 
+        expect(req.session.destroy).toHaveBeenCalled();
         expect(res.status).toHaveBeenCalledWith(200);
-        expect(res.json).toHaveBeenCalledWith({ message: "User deleted", user: req.body });
+        expect(res.json).toHaveBeenCalledWith({ message: "User deleted", user: req.session.user });
     });
 });
