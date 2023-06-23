@@ -92,11 +92,15 @@ const getMenus = async (url) => {
 }
 
 const getAllMenus = async () => {
+    console.log('******SCRAPING DINING WEB PAGES******');
+
     northMenus = await getMenus('https://dining.rice.edu/north-servery');
     southMenus = await getMenus('https://dining.rice.edu/south-servery');
     westMenus = await getMenus('https://dining.rice.edu/west-servery');
     seibelMenus = await getMenus('https://dining.rice.edu/seibel-servery');
     bakerMenus = await getMenus('https://dining.rice.edu/baker-college-kitchen');
+
+    console.log("******MENUS SUCCESSFULLY SCRAPED******");
 
     return {
         north: northMenus,

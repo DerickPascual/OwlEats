@@ -7,7 +7,9 @@ const session = require('express-session');
 const errorHandler = require('./middleware/errorHandler');
 const port = 3500;
 
-app.set("trust proxy", 1); 
+if (process.env.NODE_ENV === 'development') {
+    app.set("trust proxy", 1); 
+}
 
 if (process.env.NODE_ENV === 'production') {
     app.use(express.static(path.join(__dirname, './client/build')));
@@ -28,7 +30,7 @@ app.use(session({
         tableName: 'session'
     }),
     secret: process.env.SESSION_SECRET_KEY,
-    proxy: true,
+    proxy: process.env.NODE_ENV === 'development',
     resave: true,
     saveUninitialized: true,
     cookie: { 

@@ -1,9 +1,9 @@
-const { startBreakSchedulers } = require('./background_tasks/schedulers/breakScheduler');
-const { startUpdateSchedulers } = require('./background_tasks/schedulers/updateScheduler');
-const { startTextSchedulers } = require('./background_tasks/schedulers/textScheduler');
+const { startBreakSchedulers } = require('./schedulers/breakScheduler');
+const { startUpdateSchedulers } = require('./schedulers/updateScheduler');
+const { startTextSchedulers } = require('./schedulers/textScheduler');
 
 startBreakSchedulers();
 startUpdateSchedulers();
 startTextSchedulers();
 
-console.log('Schedulers started');
+console.log('******STARTED SCHEDULERS******');
