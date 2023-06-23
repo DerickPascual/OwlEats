@@ -93,7 +93,7 @@ const tuesThroughSunLunUpdateScheduler = new CronJob({
 
 // can run this without manipulating delayTexts since I've never seen menus not be updated by dinner.
 const dailyDinUpdateScheduler = new CronJob({
-    cronTime: '*/2 * * * *',
+    cronTime: '50 15 * * *',
     onTick: async () => {
         await updateMenusIfNew();
     },
