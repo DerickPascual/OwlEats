@@ -4,7 +4,9 @@
 }
 
 .checkbox {
-    transform: scale(1.5);
+    margin: 10px;
+    margin-top: 12px;
+    margin-bottom: 12px;
 }
 
 .checkbox:hover {

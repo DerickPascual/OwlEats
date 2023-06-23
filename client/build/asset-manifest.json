@@ -1,17 +1,17 @@
 {
   "files": {
-    "main.css": "/static/css/main.1abe5602.css",
+    "main.css": "/static/css/main.5dd85a43.css",
     "main.js": "/static/js/main.69298dce.js",
     "static/media/SFPRODISPLAYBOLD.OTF": "/static/media/SFPRODISPLAYBOLD.b1f4d2c69fa808ebca12.OTF",
     "static/media/SFPRODISPLAYREGULAR.OTF": "/static/media/SFPRODISPLAYREGULAR.d1f5e6e16dd4f75c3950.OTF",
     "static/media/dinner_text.jpg": "/static/media/dinner_text.3b0bd39565a55146bb2d.jpg",
     "static/media/Camphor-W01-Bold.ttf": "/static/media/Camphor-W01-Bold.f5c4eb9a7868e7a66cc1.ttf",
     "index.html": "/index.html",
-    "main.1abe5602.css.map": "/static/css/main.1abe5602.css.map",
+    "main.5dd85a43.css.map": "/static/css/main.5dd85a43.css.map",
     "main.69298dce.js.map": "/static/js/main.69298dce.js.map"
   },
   "entrypoints": [
-    "static/css/main.1abe5602.css",
+    "static/css/main.5dd85a43.css",
     "static/js/main.69298dce.js"
   ]
 }
