@@ -40,7 +40,7 @@
     "libphonenumber-js": "^1.10.36",
     "luxon": "^3.3.0",
     "pg": "^8.11.0",
-    "puppeteer": "^20.7.2",
+    "puppeteer": "^18.1.0",
     "twilio": "^4.12.0"
   }
 }
