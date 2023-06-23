@@ -119,10 +119,10 @@ const createTxt = (menus, mealtime, userServeries, userDiets=[], userAllergens=[
     const txt = txtHeader + txtBody + txtFooter;
 
     return txt;
-}
+};
 
 if (process.env.NODE_ENV === 'test') {
     module.exports = { createTxtBody, filterDiets, filterAllergens, createTxtMenu, createTxt };
 } else {
-    module.exports = createTxt;
+    module.exports = { createTxt };
 }
