@@ -1,0 +1,28 @@
+@font-face {
+  font-family: 'Camphor Bold';
+  src: url('./fonts/Camphor-W01-Bold.ttf');
+}
+
+@font-face {
+  font-family: 'SF Pro Bold';
+  src: url('./fonts/SFPRODISPLAYBOLD.OTF');
+}
+
+
+body {
+  background-color: black;
+  font-family: 'SF Pro Bold';
+  color: rgb(234, 234, 234);
+  display: flex;
+  justify-content: center;
+}
+
+.page {
+  width: 70vw;
+}
+
+@media screen and (max-width: 800px) {
+  .page {
+      width: 90vw;
+  }
+}

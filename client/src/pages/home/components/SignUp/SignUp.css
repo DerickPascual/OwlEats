@@ -1,0 +1,99 @@
+@font-face {
+    font-family: 'SF Pro Regular';
+    src: url('../../../../fonts/SFPRODISPLAYREGULAR.OTF');
+  }
+    
+.SignUp-hero--container {
+    margin-top: 10vh;
+    display: flex;
+    align-items: center;
+}
+
+.SignUp-hero--title {
+    font-size: 4vw;
+}
+
+.SignUp-hero--body {
+    font-size: 3vw;
+    color: rgb(175, 175, 175);
+}
+
+
+.SignUp-hero--left {
+    height: 500px;
+    margin-right: 3vw;
+}
+
+.SignUp-hero--form-container {
+}
+
+.SignUp-hero--form-button {
+    all: unset;
+    margin-top: 2vh;
+    padding: 8px;
+    padding-left: 10px;
+    padding-right: 10px;
+    border-radius: 20px;
+    background: rgb(14, 122, 254);
+    margin-bottom: 0.5vh;
+}
+
+.SignUp-hero--form-button:hover {
+    cursor: pointer;
+    background: rgb(27, 95, 179);
+}
+
+.SignUp-hero--image {
+    margin-right: 3vh;
+    height: 500px;
+}
+
+.SignUp-error {
+    margin-top: 2vh;
+    color: rgb(210, 67, 67);
+}
+
+@media screen and (max-width: 850px) {
+    .SignUp-hero--container {
+        justify-content: center;
+    }
+
+    .SignUp-hero--title {
+        font-size: 2.25rem;
+    }
+
+    .SignUp-hero--body {
+        font-size: 1.25rem;
+    }
+}
+
+@media screen and (max-width: 650px) {
+    .SignUp-hero--image {
+        display: none;
+    }
+}
+
+@media screen and (max-height: 800px) {
+    .SignUp-hero--container {
+        margin-top: 2vh;
+    }
+}
+
+@media screen and (min-width: 1150px) {
+    .SignUp-hero--form-container {
+        display: flex;
+        align-items: flex-end;
+    }
+
+    .SignUp-hero--title {
+        font-size: 3rem;
+    }
+
+    .SignUp-hero--body {
+        font-size: 2rem;
+    }
+
+    .SignUp-hero--form-button {
+        margin-left: 2vh;
+    }
+}

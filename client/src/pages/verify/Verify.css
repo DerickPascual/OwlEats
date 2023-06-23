@@ -1,0 +1,37 @@
+.verify-form-container {
+    display: flex;
+    justify-content: center;
+}
+
+.verify-input {
+    height: 40px;
+    border-radius: 7px;
+    font-size: 1rem;
+}
+
+.verify-button-submit-container {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.verify-button {
+    all: unset;
+    margin-top: 2vh;
+    padding: 8px;
+    padding-left: 15px;
+    padding-right: 15px;
+    border-radius: 20px;
+    background: rgb(14, 122, 254);
+}
+
+.verify-button:hover {
+    cursor: pointer;
+    background: rgb(27, 95, 179);
+}
+
+.verify-error {
+    margin-top: 2vh;
+    margin-bottom: 2vh;
+    color: rgb(210, 67, 67);
+}

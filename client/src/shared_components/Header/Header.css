@@ -1,0 +1,13 @@
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.header-anchor {
+    all: unset;
+}
+
+.header-anchor:hover {
+    cursor: pointer;
+}

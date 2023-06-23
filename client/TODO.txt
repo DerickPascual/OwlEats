@@ -1,0 +1,1 @@
+4. Prepare application for deployment (i.e. use advances proxy, conditional api calls), so easier for updates

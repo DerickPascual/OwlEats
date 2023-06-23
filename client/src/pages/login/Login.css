@@ -1,0 +1,40 @@
+.login-platform { 
+    display: flex;
+    justify-content: center;
+}
+
+.login-button-container {
+    margin-top: 2vh;
+}
+
+.login-button {
+    all: unset;
+    padding: 8px;
+    padding-left: 15px;
+    padding-right: 15px;
+    border-radius: 20px;
+    background: rgb(14, 122, 254);
+}
+
+.login-button:hover {
+    cursor: pointer;
+    background: rgb(27, 95, 179);
+}
+
+.login-sign-up-anchor {
+    all: unset;
+    color: rgb(175, 175, 175);
+    text-decoration: underline;
+}
+
+.login-sign-up-anchor:hover {
+    color: rgb(14, 122, 254);
+    cursor: pointer;
+}
+
+.login-error {
+    margin-top: 2vh;
+    margin-bottom: 2vh;
+    color: rgb(210, 67, 67);
+    width: fit-content;
+}

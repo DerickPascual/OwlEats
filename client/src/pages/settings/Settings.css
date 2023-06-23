@@ -1,0 +1,66 @@
+.settings-subtext {
+    color: rgb(175, 175, 175);
+}
+
+.settings-section-container {
+    display: flex;
+}
+
+.settings-description {
+    width: 50%;
+}
+
+.settings-form {
+    width: 50%;
+    margin-right: 5vh;
+    margin-left: 5vh;
+    display: flex;
+    justify-content: center;
+}
+
+.settings-checkbox-container {
+    width: 40%;
+}
+
+.settings-bottom-container {
+    margin-top: 2vh;
+    margin-bottom: 10vh;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.settings-bottom-container:before {
+    width: 100px;
+    content: '';
+}
+
+.settings-submit-button-container {
+    text-align: center;
+}
+
+.settings-unsubscribe-button {
+    all: unset;
+    text-decoration: underline;
+    width: 100px;
+}
+
+.settings-unsubscribe-button:hover {
+    cursor: pointer;
+    color: rgb(180, 180, 180);
+}
+
+.settings-submit-button {
+    all: unset;
+    font-size: 1.25rem;
+    padding: 8px;
+    padding-left: 15px;
+    padding-right: 15px;
+    border-radius: 20px;
+    background: rgb(14, 122, 254);
+}
+
+.settings-submit-button:hover {
+    cursor: pointer;
+    background: rgb(27, 95, 179);
+}

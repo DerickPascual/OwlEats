@@ -1,0 +1,19 @@
+.checkbox-container {
+    display: flex;
+    align-items: center;
+}
+
+.checkbox {
+    margin: 10px;
+    margin-top: 12px;
+    margin-bottom: 12px;
+    transform: scale(1.5);
+}
+
+.checkbox:hover {
+    cursor: pointer;
+}
+
+.checkbox-label {
+    font-size: 1.125rem;
+}

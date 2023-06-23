@@ -1,0 +1,13 @@
+@font-face {
+    font-family: 'SF Pro Regular';
+    src: url('../../fonts/SFPRODISPLAYREGULAR.OTF');
+  }
+
+.PhoneInput {
+    font-family: 'SF Pro Regular';
+}
+
+.PhoneInput-dropdown {
+    font-family: 'SF Pro Regular';
+    color: black;
+}
