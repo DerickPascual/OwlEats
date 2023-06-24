@@ -64,6 +64,15 @@
     background: rgb(27, 95, 179);
 }
 
+.settings-note-anchor {
+    text-decoration: underline;
+}
+
+.settings-note-anchor:hover {
+    cursor: pointer;
+    color: rgb(14, 122, 254);
+}
+
 @media screen and (max-width: 800px) {
     .settings-form {
         margin-left: 20px;

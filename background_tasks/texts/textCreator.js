@@ -100,9 +100,9 @@ const createTxtBody = (menus, userServeries, userDiets, userAllergens) => {
         if (!userServeries.includes(servery)) {
             continue;
         }
-        
+
         mitems = filterDiets(menus[servery], userDiets);
-        mitems = filterAllergens(menus[servery], userAllergens);
+        mitems = filterAllergens(mitems, userAllergens);
         mitems = getMitemNames(mitems);
         txtBody += createTxtMenu(mitems, servery) + '\n';
     }

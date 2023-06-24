@@ -5,6 +5,7 @@ import { Home, HomeLoader } from './pages/home/Home';
 import { Login, LoginLoader } from './pages/login/Login';
 import { Verify, VerifyLoader } from './pages/verify/Verify';
 import { Settings, SettingsLoader } from './pages/settings/Settings';
+import MultiplePreferences from './pages/multiplePreferences/MultiplePreferences';
 import ErrorPage from './pages/ErrorPage/ErrorPage';
 import { App } from './App';
 import {
@@ -42,6 +43,10 @@ const router = createBrowserRouter([
         path: 'settings',
         element: <Settings />,
         loader: SettingsLoader
+      },
+      {
+        path: 'multiple-prefs',
+        element: <MultiplePreferences />
       }
     ]
   }

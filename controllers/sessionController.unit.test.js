@@ -20,7 +20,7 @@ describe('getUser tests', () => {
             status: jest.fn().mockReturnThis(),
             json: jest.fn()
         };
-
+        
         getUser(req, res);
 
         expect(res.status).toHaveBeenCalled();

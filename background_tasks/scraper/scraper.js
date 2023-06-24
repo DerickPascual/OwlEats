@@ -18,40 +18,40 @@ const scraper = async (browser, url) => {
                 const diets = []
                 const allergens = [];
                 if (dietInfoParent) {
-                    const vegetarian = dietInfoParent.querySelector('.icons-vegetarian');
+                    const vegetarian = dietInfoParent.querySelector('.vegetarian');
                     if (vegetarian) diets.push('vegetarian');
                 
-                    const vegan = dietInfoParent.querySelector('.icons-vegan');
+                    const vegan = dietInfoParent.querySelector('.vegan');
                     if (vegan) diets.push('vegan');
 
-                    const halal = dietInfoParent.querySelector('.icons-halal');
+                    const halal = dietInfoParent.querySelector('.halal');
                     if (halal) diets.push('halal');
 
-                    const gluten = dietInfoParent.querySelector('.icons-gluten');
+                    const gluten = dietInfoParent.querySelector('.gluten');
                     if (gluten) allergens.push('gluten');
                 
-                    const soy = dietInfoParent.querySelector('.icons-soy');
+                    const soy = dietInfoParent.querySelector('.soy');
                     if (soy) allergens.push('soy');
                 
-                    const dairy = dietInfoParent.querySelector('.icons-milk');
+                    const dairy = dietInfoParent.querySelector('.milk');
                     if (dairy) allergens.push('dairy');
                 
-                    const eggs = dietInfoParent.querySelector('.icons-eggs');
+                    const eggs = dietInfoParent.querySelector('.eggs');
                     if (eggs) allergens.push('eggs');
                 
-                    const fish = dietInfoParent.querySelector('.icons-fish');
+                    const fish = dietInfoParent.querySelector('.fish');
                     if (fish) allergens.push('fish');
                 
-                    const shellfish = dietInfoParent.querySelector('.icons-shellfish');
+                    const shellfish = dietInfoParent.querySelector('.shellfish');
                     if (shellfish) allergens.push('shellfish');
                 
-                    const peanuts = dietInfoParent.querySelector('.icons-peanuts');
+                    const peanuts = dietInfoParent.querySelector('.peanuts');
                     if (peanuts) allergens.push('peanuts');
                 
-                    const treeNuts = dietInfoParent.querySelector('.icons-tree-nuts');
+                    const treeNuts = dietInfoParent.querySelector('.treenuts');
                     if (treeNuts) allergens.push('treenuts');
                 
-                    const sesame = dietInfoParent.querySelector('.icons-sesame');
+                    const sesame = dietInfoParent.querySelector('.sesame');
                     if (sesame) allergens.push('sesame');
                 }
                 

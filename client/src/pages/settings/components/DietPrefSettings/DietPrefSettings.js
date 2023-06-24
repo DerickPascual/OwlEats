@@ -1,9 +1,12 @@
 import Checkbox from '../Checkbox/Checkbox';
-import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import '../../Settings.css'
 
 const possibleDiets = ["Vegetarian", "Vegan", "Halal"]
 
 function DietPrefSettings({ checkedDiets, setCheckedDiets }) {
+    const navigate = useNavigate();
+
     const updateCheckStatus = (e) => {
         let updatedList = [...checkedDiets];
 
@@ -17,12 +20,19 @@ function DietPrefSettings({ checkedDiets, setCheckedDiets }) {
         setCheckedDiets(updatedList);
     };
 
+    const handleNoteRedirect = (e) => {
+        e.preventDefault();
+
+        navigate('/multiple-prefs')
+    }
+
     return (
         <div className='settings-section-container'>
             <div className='settings-description'>
                 <h2>Dietary Preferences</h2>
                 <div className='settings-subtext'>
                     <h3>If you select a dietary preference, you'll only receive menu items that align with that preference.</h3>
+                    <h3>Click <a className="settings-note-anchor"onClick={handleNoteRedirect}>here</a> for a note about selecting multiple preferences.</h3>
                 </div>
             </div>
             <div className='settings-form'>

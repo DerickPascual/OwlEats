@@ -1,0 +1,13 @@
+.multiplePreferences-description {
+    color: rgb(175, 175, 175);
+}
+
+.multiplePreferences-redirect {
+    color: rgb(14, 122, 254);
+    text-decoration: underline;
+}
+
+.multiplePreferences-redirect:hover {
+    cursor: pointer;
+    color: rgb(27, 95, 179);
+}

@@ -1,17 +1,17 @@
 {
   "files": {
-    "main.css": "/static/css/main.d6f09a23.css",
-    "main.js": "/static/js/main.69298dce.js",
+    "main.css": "/static/css/main.e47cef77.css",
+    "main.js": "/static/js/main.99a6003e.js",
     "static/media/SFPRODISPLAYBOLD.OTF": "/static/media/SFPRODISPLAYBOLD.b1f4d2c69fa808ebca12.OTF",
     "static/media/SFPRODISPLAYREGULAR.OTF": "/static/media/SFPRODISPLAYREGULAR.d1f5e6e16dd4f75c3950.OTF",
     "static/media/dinner_text.jpg": "/static/media/dinner_text.3b0bd39565a55146bb2d.jpg",
     "static/media/Camphor-W01-Bold.ttf": "/static/media/Camphor-W01-Bold.f5c4eb9a7868e7a66cc1.ttf",
     "index.html": "/index.html",
-    "main.d6f09a23.css.map": "/static/css/main.d6f09a23.css.map",
-    "main.69298dce.js.map": "/static/js/main.69298dce.js.map"
+    "main.e47cef77.css.map": "/static/css/main.e47cef77.css.map",
+    "main.99a6003e.js.map": "/static/js/main.99a6003e.js.map"
   },
   "entrypoints": [
-    "static/css/main.d6f09a23.css",
-    "static/js/main.69298dce.js"
+    "static/css/main.e47cef77.css",
+    "static/js/main.99a6003e.js"
   ]
 }
