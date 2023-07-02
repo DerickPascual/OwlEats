@@ -1,6 +1,6 @@
 const CronJob = require('cron').CronJob;
 const getAllMenus = require('../scraper/scraperManager');
-const { updateAllMenus, fetchWeeklyMenus } = require('../../models/menus');
+const { updateAllMenus, fetchWeeklyMenus, updateWeeklyMenusTable } = require('../../models/menus');
 const onBreak = require('./breakScheduler');
 const deepEqual = require('deep-equal');
 
@@ -31,13 +31,24 @@ const menusAreNew = (currentWeeklyMenus, newWeeklyMenus, onBreak) => {
 
 // returns true if menus have been updated, false otherwise
 const updateMenusIfNew = async () => {
+    console.log("*****GETTING NEW WEEKLY MENUS*****");
     const newWeeklyMenus = await getAllMenus();
-    const currentWeeklyMenus = await fetchWeeklyMenus();
 
+    console.log("****FETCHING CURRENT WEEKLY MENUS*****");
+    const currentWeeklyMenus = await fetchWeeklyMenus();
+    
     const newMenusAreNew = menusAreNew(currentWeeklyMenus, newWeeklyMenus, onBreak);
 
     if (newMenusAreNew) {
+        console.log("*****UPDATING DAILY MENUS IN DATABASE****")
         await updateAllMenus(newWeeklyMenus);
+        console.log("*****DAILY MENUS FINISHED UPDATING*****");
+
+
+        console.log("*****UPDATING WEEKLY MENUS IN DATABASE****");
+        await updateWeeklyMenusTable(newWeeklyMenus);
+        console.log("*****WEEKLY MENUS FINISHED UPDATING*****");
+
         return true;
     }
 

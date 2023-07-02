@@ -37,7 +37,7 @@ const fetchWeeklyMenus = async () => {
         .catch((err) => {
             console.error;
         });
-    return res.rows[0];
+    return res.rows[0].menus;
 }
 
 // fetches menus from all serveries for a given day and mealtime
