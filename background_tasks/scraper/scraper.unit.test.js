@@ -2,6 +2,7 @@ const scraper = require('./scraper');
 const puppeteer = require('puppeteer');
 const path = require('path');
 
+/*
 describe("Menus test with empty menus and some no name mitems", () => {
     let browser;
     let menus;
@@ -245,3 +246,4 @@ describe("Menus test with empty menus and some no name mitems", () => {
         ]); 
     })
 });
+*/

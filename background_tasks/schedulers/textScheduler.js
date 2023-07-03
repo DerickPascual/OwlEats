@@ -1,5 +1,5 @@
 const CronJob = require('cron').CronJob;
-const { delayTexts } = require('./updateScheduler');
+const { getDelayTexts } = require('./updateScheduler');
 const { fetchAllUsers } = require('../../models/users');
 const { fetchMenus } = require('../../models/menus');
 const { sendAllTexts } = require('../texts/textSender');
@@ -42,6 +42,8 @@ const monLunchTextScheduler = new CronJob({
     cronTime: '*/5 10-12 * * 1',
     onTick: async () => {
         // mondayTextsSent flag is unecessary but it's here for my peace of mind lol, just in case the scheduler doesn't stop so the program doesn't spam people.
+        const delayTexts = getDelayTexts();
+
         if (!delayTexts && !mondayTextsSent) {
             await sendTexts('lunch');
             mondayTextsSent = true;

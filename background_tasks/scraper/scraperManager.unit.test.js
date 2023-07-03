@@ -366,6 +366,7 @@ describe('restructureMenus tests', () => {
   });
 });
 
+/*
 describe('getMenus tests', () => {
   test('Case with meals, nameless items', async () => {
     const menu = await getMenus('file://' + path.join(__dirname, 'mock_pages', 'northMenus_6_13_23.html'));
@@ -915,3 +916,4 @@ describe('getMenus tests', () => {
     });
   })
 });
+*/

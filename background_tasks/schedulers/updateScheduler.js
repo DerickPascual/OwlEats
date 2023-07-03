@@ -6,6 +6,10 @@ const deepEqual = require('deep-equal');
 
 let delayTexts = false;
 
+const getDelayTexts = () => {
+    return delayTexts;
+}
+
 const menusAreNew = (currentWeeklyMenus, newWeeklyMenus, onBreak) => {
     const serveries = ['north', 'west', 'south', 'seibel', 'baker'];
 
@@ -104,7 +108,7 @@ const tuesThroughSunLunUpdateScheduler = new CronJob({
 
 // can run this without manipulating delayTexts since I've never seen menus not be updated by dinner.
 const dailyDinUpdateScheduler = new CronJob({
-    cronTime: '50 15 * * *',
+    cronTime: '50 15 * * 1-6',
     onTick: async () => {
         await updateMenusIfNew();
     },
@@ -120,7 +124,7 @@ const startUpdateSchedulers = () => {
 };
 
 if (process.env.NODE_ENV === 'test') {
-    module.exports = { delayTexts, menusAreNew, startUpdateSchedulers }
+    module.exports = { getDelayTexts, menusAreNew, startUpdateSchedulers }
 } else {
-    module.exports = { delayTexts, startUpdateSchedulers };
+    module.exports = { getDelayTexts,startUpdateSchedulers };
 }
