@@ -114,7 +114,7 @@ const createTxt = (menus, mealtime, userServeries, userDiets=[], userAllergens=[
     const txtHeader = createTxtHeader(mealtime);
     const txtBody = createTxtBody(menus, userServeries, userDiets, userAllergens);
 
-    const txtFooter = '\nManage settings/unsubscribe at: www.ricemenus.com';
+    const txtFooter = '\nManage settings at: www.ricemenus.com\nReply STOP to unsubscribe.';
 
     const txt = txtHeader + txtBody + txtFooter;
 
