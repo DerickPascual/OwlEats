@@ -37,9 +37,11 @@ const menusAreNew = (currentWeeklyMenus, newWeeklyMenus, onBreak) => {
 const updateMenusIfNew = async () => {
     console.log("*****GETTING NEW WEEKLY MENUS*****");
     const newWeeklyMenus = await getAllMenus();
+    console.log(newWeeklyMenus.south.tuesday.lunch);
 
     console.log("****FETCHING CURRENT WEEKLY MENUS*****");
     const currentWeeklyMenus = await fetchWeeklyMenus();
+    console.log(currentWeeklyMenus.south.tuesday.lunch);
     
     const newMenusAreNew = menusAreNew(currentWeeklyMenus, newWeeklyMenus, onBreak);
 
@@ -115,13 +117,16 @@ const dailyDinUpdateScheduler = new CronJob({
     timeZone: 'America/Chicago'
 });
 
-
 const startUpdateSchedulers = () => {
     monUpdateScheduler.start();
     monUpdateDelayedCleanupScheduler.start();
     tuesThroughSunLunUpdateScheduler.start();
     dailyDinUpdateScheduler.start();
 };
+
+(async () => {
+    await updateMenusIfNew();
+})();
 
 if (process.env.NODE_ENV === 'test') {
     module.exports = { getDelayTexts, menusAreNew, startUpdateSchedulers }
