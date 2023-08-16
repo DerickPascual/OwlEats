@@ -8,8 +8,8 @@ const scraper = async (browser, url) => {
     const menuData = await page.evaluate(() => {
         // Each views element container contains the day and lunch OR just the dinner
         return Array.from(document.querySelectorAll('.views-element-container'), (e) => {
-            const day = e.querySelector('.menu-title--day');
-            const mealtime = e.querySelector('h3');
+            const day = e.querySelector('.static-date');
+            const mealtime = e.querySelector('h2');
             const mitems = Array.from(e.querySelectorAll('.mitem'), (e2) => {
                 const name = e2.querySelector('.mname');
                 

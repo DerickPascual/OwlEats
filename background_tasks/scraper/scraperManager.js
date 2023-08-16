@@ -2,11 +2,20 @@ const puppeteer = require('puppeteer');
 const scraper = require('./scraper');
 
 const setDays = (menus) => {
-    // The data comes in the form [{ day: Monday, mealtime: lunch, mitems: [Array] }, {day: null, mealtime: dinner, mitems: [Array] } ... ]
-    // So for every other element we set the day attribute to the same as the element before it.
-    for (let i = 1; i < menus.length; i += 2) {
-        menus[i].day = menus[i - 1].day
+    const newMenus = [];
+    for (let i = 0; i < menus.length; i++) {
+        if (menus[i].day && menus[i].day.toLowerCase() === 'monday') {
+            for (let j = i; j < menus.length - 1; j += 2) {
+                newMenus.push(menus[j]);
+                menus[j + 1].day = menus[j].day;
+                newMenus.push(menus[j + 1]);
+            }
+
+            break;
+        }
     }
+
+    return newMenus;
 }
 
 // filters out blank items and &amp
@@ -86,10 +95,11 @@ const getMenus = async (url) => {
 
     await browser.close();
 
-    setDays(menus);
-    menus = restructureMenus(menus);
+    let newMenus = setDays(menus);
 
-    return menus;
+    newMenus = restructureMenus(newMenus);
+
+    return newMenus;
 }
 
 const getAllMenus = async () => {

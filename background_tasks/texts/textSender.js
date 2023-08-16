@@ -11,6 +11,7 @@ const sendAllTexts = (menus, users, mealtime) => {
         const txt = createTxt(menus, mealtime, serveries, diets, allergens);
 
         console.log(`SENDING TEXT TO ${phone}`);
+
         sendText(phone, txt);
     }
 }
