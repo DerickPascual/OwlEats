@@ -5,6 +5,7 @@ import { Home, HomeLoader } from './pages/home/Home';
 import { Login, LoginLoader } from './pages/login/Login';
 import { Verify, VerifyLoader } from './pages/verify/Verify';
 import { Settings, SettingsLoader } from './pages/settings/Settings';
+import TOSPrivacy from './pages/tosprivacy/TOSPrivacy';
 import MultiplePreferences from './pages/multiplePreferences/MultiplePreferences';
 import ErrorPage from './pages/ErrorPage/ErrorPage';
 import { App } from './App';
@@ -47,6 +48,10 @@ const router = createBrowserRouter([
       {
         path: 'multiple-prefs',
         element: <MultiplePreferences />
+      },
+      {
+        path: 'tos-and-privacy-policy',
+        element: <TOSPrivacy />
       }
     ]
   }

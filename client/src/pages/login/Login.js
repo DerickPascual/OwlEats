@@ -1,5 +1,6 @@
 import './Login.css';
 import Header from '../../shared_components/Header/Header';
+import Footer from '../../shared_components/Footer/Footer';
 import PhoneNumberInput from '../../shared_components/PhoneNumberInput/PhoneNumberInput';
 import { isValidPhoneNumber } from 'libphonenumber-js';
 import { useState, useEffect } from 'react';
@@ -50,6 +51,7 @@ export function Login() {
                     <h4 style={{ color: 'rgb(175, 175, 175)' }}>Not registered? <a className='login-sign-up-anchor' onClick={handleSignUp}>Sign up</a></h4>
                 </div>
             </div>
+            <Footer />
         </div>
     )
 }

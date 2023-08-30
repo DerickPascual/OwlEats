@@ -1,0 +1,20 @@
+.tos-privacy h2 {
+    text-align: center;
+    margin-bottom: 0px;
+}
+
+.tos-privacy h3 {
+    color: rgb(235, 235, 235);
+}
+
+.tos-privacy p {
+    color: rgb(173, 173, 173);
+}
+
+.twilio-a {
+    color: rgb(14, 122, 254);
+}
+
+.end-text {
+    color: rgb(235, 235, 235) !important;
+}

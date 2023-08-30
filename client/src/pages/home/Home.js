@@ -1,5 +1,6 @@
 import HeaderButton from '../../shared_components/HeaderButton/HeaderButton';
 import Header from '../../shared_components/Header/Header';
+import Footer from '../../shared_components/Footer/Footer';
 import SignUp from './components/SignUp/SignUp';
 import './Home.css'
 import { useNavigate, redirect } from 'react-router-dom';
@@ -17,6 +18,7 @@ export function Home() {
         <div>
             <Header button={<HeaderButton label={'Sign in'} handler={handleSignInRedirect} />}/>
             <SignUp/>
+            <Footer />
         </div>
     )
 }
