@@ -18,15 +18,22 @@ function TOSPrivacy() {
             <h3>3. Privacy and Data</h3>
             <p>3.1. Your privacy is important to us. Please review our Privacy Policy to understand how we collect, use, and protect your personal information.</p>
             <p>3.2. By using the Website, you consent to the collection, use, and disclosure of your personal information as described in the Privacy Policy.</p>
-            <h3>4. Limitation of Liability</h3>
+            <h3>4. SMS Messaging</h3>
+            <p>4.1. When you opt in to receive messages, you will receive a verification message. After verifying your phone number, you will receive SMS messages of menus you've selected at approximately 10:00 am and 4:00pm CST everyday. Menu texts may be delayed on Monday if the Rice University website is not updated for the new week.</p>
+            <p>4.2. You can cancel the SMS service at any time. Just text "STOP" to the phone number you are receiving menus from. After you send the SMS message "STOP" to us, we will send you an SMS message to confirm that you have been unsubscribed. After this, you will no longer receive messages from us. You may also unsubscribe in the settings page of the "Website." </p>
+            <p>4.3. If you are experiencing issues with the messaging program, you can reply with the keyword "HELP" for more assistance. You can also contact us for help at dvp2@rice.edu</p>
+            <p>4.4. Carriers are not liable for delayed or undelivered messages.</p>
+            <p>4.5. Message and data rates may apply for any messages sent to you from us and to us from you. You will receive two messages per day. If you have any questions about your text or data plan, it is best to contact your wireless provider.</p>
+            <p>4.6. If you have any questions regarding your privacy, please scroll down to our privacy policy below.</p>
+            <h3>5. Limitation of Liability</h3>
             <p>In no event shall Rice Menus be liable for any indirect, incidental, special, consequential, or punitive damages arising out of or in connection with your use of the Website or its services.</p>
-            <h3>5. Changes to Terms</h3>
+            <h3>6. Changes to Terms</h3>
             <p>Rice Menus reserves the right to modify, amend, or update these Terms at any time. Changes will be effective upon posting to the Website. Your continued use of the Website after any changes indicates your acceptance of the modified Terms.</p>
-            <h3>6. Termination</h3>
+            <h3>7. Termination</h3>
             <p>Rice Menus may suspend or terminate your access to the Website at any time for any reason, without notice.</p>
-            <h3>7. Governing Law</h3>
+            <h3>8. Governing Law</h3>
             <p>These Terms shall be governed by and construed in accordance with the laws of Texas, without regard to its conflict of law principles.</p>
-            <h3>8. Contact Us</h3>
+            <h3>9. Contact Us</h3>
             <p>If you have any questions about these Terms, please contact us at dvp2@rice.edu. </p>
             <p className="end-text">By using the Rice Menus Website, you acknowledge that you have read, understood, and agree to these Terms.</p>
             <br></br>
