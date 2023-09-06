@@ -5,6 +5,7 @@ function TOSPrivacy() {
     return (
         <div className="tos-privacy">
             <Header />
+            <h3 style={{color: "rgb(175, 175, 175)"}}>Note: Rice Menus is not affiliated with Rice University</h3>
             <h2>Terms of Service</h2>
             <hr></hr>
             <h3>Last updated: August 29, 2023</h3>

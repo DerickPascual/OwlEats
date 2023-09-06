@@ -6,6 +6,11 @@
     color: rgb(175, 175, 175);
 }
 
+.footer h5 {
+    padding-top: 0px;
+    margin-top: -10px;
+}
+
 .tos-navigate:hover {
     cursor: pointer;
     color: rgb(120, 120, 120);
