@@ -1,5 +1,5 @@
 const CronJob = require('cron').CronJob;
-let onBreak = true;
+let onBreak = false;
 
 // end of summer break
 const summerEndScheduler = new CronJob({
