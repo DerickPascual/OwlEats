@@ -6,7 +6,7 @@ const { sendAllTexts } = require('../texts/textSender');
 const { DateTime } = require('luxon');
 
 // this isn't really necessary 
-let mondayTextsSent = false;
+let mondayTextsSent = true;
 
 const getWeekday = () => {
     const dt = DateTime.now().setZone('America/Chicago');
