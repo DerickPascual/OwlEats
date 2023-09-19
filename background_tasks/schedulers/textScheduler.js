@@ -4,9 +4,7 @@ const { fetchAllUsers } = require('../../models/users');
 const { fetchMenus } = require('../../models/menus');
 const { sendAllTexts } = require('../texts/textSender');
 const { DateTime } = require('luxon');
-
-// this isn't really necessary 
-let mondayTextsSent = true;
+const { updateMondayTextsSent, fetchMondayTextsSent } = require('../../models/texts');
 
 const getWeekday = () => {
     const dt = DateTime.now().setZone('America/Chicago');
@@ -46,10 +44,11 @@ const monLunchTextScheduler = new CronJob({
     onTick: async () => {
         // mondayTextsSent flag is unecessary but it's here for my peace of mind lol, just in case the scheduler doesn't stop so the program doesn't spam people.
         const delayTexts = getDelayTexts();
+        const mondayTextsSent = await fetchMondayTextsSent();
 
         if (!delayTexts && !mondayTextsSent) {
             await sendTexts('lunch');
-            mondayTextsSent = true;
+            mondayTextsSent = await updateMondayTextsSent(true);
             monLunchTextScheduler.stop();
         }
     },
@@ -59,8 +58,8 @@ const monLunchTextScheduler = new CronJob({
 // restarts the monday scheduler if texts have been sent
 const monLunchTextRestartScheduler = new CronJob({
     cronTime: '30 13 * * 1',
-    onTick: () => {
-        mondayTextsSent = false;
+    onTick: async () => {
+        mondayTextsSent = await updateMondayTextsSents(false);
         monLunchTextScheduler.start();
     },
     timeZone: 'America/Chicago'

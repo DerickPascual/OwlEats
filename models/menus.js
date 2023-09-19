@@ -80,7 +80,6 @@ VALUES('monday', 'lunch'), ('monday', 'dinner'),
 ('saturday', 'lunch'), ('saturday', 'dinner'),
 ('sunday', 'lunch'), ('sunday', 'dinner');`
 
-
 const createWeeklyJSONQuery = `CREATE TABLE weekly_menus (
     menu JSONB
 )`;
