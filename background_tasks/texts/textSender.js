@@ -1,6 +1,5 @@
 const { createTxt } = require('./textCreator');
 const { sendText } = require('../../twilio/messenger');
-const { ConversationListInstance } = require('twilio/lib/rest/conversations/v1/conversation');
 
 const sendAllTexts = (menus, users, mealtime) => {
     for (user of users) {
