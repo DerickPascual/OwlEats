@@ -31,8 +31,6 @@ const sendTexts = async (mealtime) => {
 
     const users = await fetchAllUsers();
 
-    console.log(users);
-
     const menus = await fetchMenus(day, mealtime);
 
     await sendAllTexts(menus, users, mealtime);
