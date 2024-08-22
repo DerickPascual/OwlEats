@@ -26,6 +26,7 @@ const getWeekday = () => {
     };
 };
 
+// Function for accumulating all logic towards sending texts to users
 const sendTexts = async (mealtime) => {
     const day = getWeekday();
 

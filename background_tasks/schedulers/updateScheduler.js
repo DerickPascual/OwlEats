@@ -10,6 +10,7 @@ const getDelayTexts = () => {
     return delayTexts;
 }
 
+// Helper function that checks if menus are new given currently weekly menus, new ones, and if we are on break or not.
 const menusAreNew = (currentWeeklyMenus, newWeeklyMenus, onBreak) => {
     const serveries = ['north', 'west', 'south', 'seibel', 'baker'];
 

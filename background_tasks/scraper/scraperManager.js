@@ -1,6 +1,7 @@
 const puppeteer = require('puppeteer');
 const scraper = require('./scraper');
 
+// Sets days in fields of menu object since some fields may have null days.
 const setDays = (menus) => {
     const newMenus = [];
     for (let i = 0; i < menus.length; i++) {
@@ -85,6 +86,7 @@ const restructureMenus = (menus) => {
     return newMenu;
 }
 
+// Gets restructured menus for a single url
 const getMenus = async (url) => {
     const browser = await puppeteer.launch({
         headless: true,
@@ -102,6 +104,7 @@ const getMenus = async (url) => {
     return newMenus;
 }
 
+// Gets restructured menus for all urls
 const getAllMenus = async () => {
     console.log('******SCRAPING DINING WEB PAGES******');
 

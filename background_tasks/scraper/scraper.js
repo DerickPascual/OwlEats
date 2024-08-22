@@ -1,3 +1,4 @@
+// Obtains menus object from url
 const scraper = async (browser, url) => {
     console.log(`Navigating to URL: ${url}`);
     

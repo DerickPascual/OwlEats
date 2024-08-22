@@ -1,6 +1,7 @@
 const { createTxt } = require('./textCreator');
 const { sendText } = require('../../twilio/messenger');
 
+// Sends texts to all users given menus, users, and mealtime.
 const sendAllTexts = (menus, users, mealtime) => {
     for (user of users) {
         const phone = user.phoneNumber;
